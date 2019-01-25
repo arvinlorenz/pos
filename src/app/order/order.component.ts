@@ -28,7 +28,7 @@ export class OrderComponent implements OnInit, OnDestroy {
 
     this.form = new FormGroup({
       orderNumber: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(10)]
+        validators: [Validators.required, Validators.minLength(7)]
       })
     });
 
