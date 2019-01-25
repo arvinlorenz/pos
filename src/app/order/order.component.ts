@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialog} from '@angular/material';
 
 import { OrderService } from './order.service';
 import { ModalComponent } from './modal/modal.component';
@@ -38,19 +38,16 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   processOrder(){
-    this.orderService.processOrder(this.form.value.orderNumber)
-      .subscribe(responseData => {
-        console.log(responseData)
+    this.orderService.processOrder(this.form.value.orderNumber).subscribe(responseData => {
+ 
         if(responseData.ProcessedState == 'PROCESSED'){
           this.orderService.incrementProcessCount();
           this.orderService.playSuccess();  
           this.form.reset();
         }
 
-        else if(responseData.ProcessedState == 'NOT_PROCESSED'){
-            if(responseData.Message == `The order ${this.form.value.orderNumber} with postal service Tracked requires tracking number`){
-                console.log('kaylangan tracking boy')
-
+        else if(responseData.ProcessedState === 'NOT_PROCESSED'){
+            if(responseData.Message === `The order ${this.form.value.orderNumber} with postal service Tracked requires tracking number`){
                 const dialogRef = this.dialog.open(ModalComponent, {
                   width: '250px',
                   data: {orderId: responseData.OrderId, notHashedOrderId: this.form.value.orderNumber}
@@ -68,7 +65,7 @@ export class OrderComponent implements OnInit, OnDestroy {
         else{
           this.orderService.playError(); 
         }
-    }
+    })
   }
 
   ngOnDestroy(){
