@@ -42,7 +42,7 @@ export class OrderService{
             "https://api.linnworks.net/api/Auth/AuthorizeByApplication",
             {params}
         )
-        .subscribe(responseData => {
+        .subscribe((responseData:any) => {
             this.token = responseData.Token;
             this.tokenIsAvailable = true;
             //console.log(responseData)

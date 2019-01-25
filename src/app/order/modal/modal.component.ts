@@ -23,8 +23,7 @@ export class ModalComponent implements OnInit {
     this.orderService.addTrackingNumber(this.data.orderId, this.trackingNumber)
     .subscribe(responseData =>{
       this.orderService.processOrder(this.data.notHashedOrderId)
-      .subscribe((responseData)=>{
-        console.log(responseData);
+      .subscribe((responseData:any)=>{
         if(responseData.ProcessedState == 'PROCESSED'){
           this.closeDialog();
           this.orderService.incrementProcessCount();

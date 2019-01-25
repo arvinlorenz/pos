@@ -38,7 +38,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   processOrder(){
-    this.orderService.processOrder(this.form.value.orderNumber).subscribe(responseData => {
+    this.orderService.processOrder(this.form.value.orderNumber).subscribe((responseData:any) => {
  
         if(responseData.ProcessedState == 'PROCESSED'){
           this.orderService.incrementProcessCount();
