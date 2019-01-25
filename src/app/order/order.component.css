@@ -1,0 +1,15 @@
+.main {
+    width: 80%;
+    margin: 1rem auto;
+}
+
+mat-card{
+
+    max-width: 70%;
+    margin: 0 auto;
+
+}
+
+.mat-raised-button{
+    border-radius: 0;
+}
