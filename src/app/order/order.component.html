@@ -1,22 +1,29 @@
 <div class="main">
   <mat-card>
-
-      <form [formGroup]="form" (submit)="processOrder()">
-          <mat-form-field>
-            <input 
-              formControlName="orderNumber"
-              matInput 
-              placeholder="Order Number">
-          </mat-form-field>
-          <button 
-            mat-raised-button
-            color="basic"
-            type="submit"
-            >Process Order
-          </button>
-      </form>
-
-      <p>Process Count: {{processCount}} </p>
+      <div class="row">
+          <div class="col-4">
+            <form [formGroup]="form" (submit)="processOrder()">
+                <mat-form-field>
+                  <input 
+                    formControlName="orderNumber"
+                    matInput 
+                    placeholder="Order Number">
+                </mat-form-field>
+                <button 
+                  mat-raised-button
+                  color="basic"
+                  type="submit"
+                  >Process Order
+                </button>
+            </form>
+            <br>
+            <p> Count: {{processCount}} </p>
+          </div>
+          <div class="col-8">
+              <app-order-return-message></app-order-return-message>
+            
+          </div>
+      </div>
 
   </mat-card>
 

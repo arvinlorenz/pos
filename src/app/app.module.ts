@@ -14,9 +14,12 @@ import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
+import {MatTableModule} from '@angular/material/table';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalComponent } from './order/modal/modal.component';
+import { OrderReturnMessageComponent } from './order/order-return-message/order-return-message.component';
 
 
 
@@ -25,7 +28,8 @@ import { ModalComponent } from './order/modal/modal.component';
     AppComponent,
     OrderComponent,
     HeaderComponent,
-    ModalComponent
+    ModalComponent,
+    OrderReturnMessageComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +43,8 @@ import { ModalComponent } from './order/modal/modal.component';
     MatToolbarModule,
     MatButtonModule,
     MatDialogModule,
+    MatTableModule,
+    MatFormFieldModule,
 
     BrowserAnimationsModule
   ],

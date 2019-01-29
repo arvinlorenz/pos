@@ -28,7 +28,7 @@ export class OrderComponent implements OnInit, OnDestroy {
 
     this.form = new FormGroup({
       orderNumber: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(7)]
+        validators: [Validators.required, Validators.minLength(6)]
       })
     });
 
@@ -38,10 +38,13 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   processOrder(){
+
+    if(this.form.invalid){return;}
     this.orderService.processOrder(this.form.value.orderNumber).subscribe((responseData:any) => {
  
         if(responseData.ProcessedState == 'PROCESSED'){
           this.orderService.incrementProcessCount();
+          this.orderService.setReturnResponse(responseData);
           this.orderService.playSuccess();  
           this.form.reset();
         }
@@ -50,20 +53,42 @@ export class OrderComponent implements OnInit, OnDestroy {
             if(responseData.Message === `The order ${this.form.value.orderNumber} with postal service Tracked requires tracking number`){
                 const dialogRef = this.dialog.open(ModalComponent, {
                   width: '250px',
-                  data: {orderId: responseData.OrderId, notHashedOrderId: this.form.value.orderNumber}
+                  data: {orderId: responseData.OrderId, notHashedOrderId: this.form.value.orderNumber, form: this.form}
                 });
             
                 dialogRef.afterClosed().subscribe(result => {
-                  console.log(`Dialog result: ${result}`); 
+                  console.log(`Dialog result: ${result}`);
+   
                 });
                 
             }
+            
             else{
               this.orderService.playError(); 
+              this.orderService.setReturnResponse(responseData);
             }
         }
+
+
+        else if(responseData.ProcessedState === 'NOT_FOUND'){
+
+          this.orderService.searchProcessedOrders(this.form.value.orderNumber).subscribe((processedRes:any)=>{
+            if(processedRes.ProcessedOrders.Data.length > 0){
+              this.orderService.setReturnResponse(processedRes);
+              this.form.reset();
+            }
+            else{
+              this.orderService.setReturnResponse('NO DATA FOUND'); 
+              this.form.reset();
+              this.orderService.playError(); 
+            }
+          })
+        }
+
+
         else{
           this.orderService.playError(); 
+          console.log(responseData)
         }
     })
   }

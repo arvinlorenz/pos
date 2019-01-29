@@ -7,6 +7,10 @@ import { Subject } from "rxjs";
 export class OrderService{
     processCount = 0;
     private processCountUpdated = new Subject<number>();
+
+    returnResponse;
+    private returnResponseUpdated = new Subject<any>();
+
     token = '';
     tokenIsAvailable = false;
     ErrorAudio: HTMLAudioElement = new Audio('sounds/error.wav');
@@ -18,8 +22,21 @@ export class OrderService{
         this.processCount++;
         this.processCountUpdated.next(this.processCount);
     }
+    
     getProcessCountUpdateListener(){
         return this.processCountUpdated.asObservable();
+    }
+
+
+
+    setReturnResponse(message){
+        this.returnResponse = message;
+        console.log(this.returnResponse)
+        this.returnResponseUpdated.next(this.returnResponse);
+    }
+
+    getReturnResponseUpdateListener(){
+        return this.returnResponseUpdated.asObservable();
     }
 
     playSuccess(){
@@ -77,6 +94,19 @@ export class OrderService{
                 "PostalServiceId": "00000000-0000-0000-0000-000000000000",
                 "TrackingNumber": trackingNumber,
                 "ManualAdjust": true
+              }
+            }
+        const options = {  headers: new HttpHeaders().set('Authorization', this.token) };
+        return  this.http.post(url,params,options);
+    }
+
+    searchProcessedOrders(orderId:string){
+        let url = `https://as-ext.linnworks.net/api/ProcessedOrders/SearchProcessedOrders`;
+        let params = {
+            request:{
+                "SearchTerm": orderId,
+                "PageNumber": 1,
+                "ResultsPerPage": 20,
               }
             }
         const options = {  headers: new HttpHeaders().set('Authorization', this.token) };
