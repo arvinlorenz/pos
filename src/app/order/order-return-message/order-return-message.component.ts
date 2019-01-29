@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { OrderService } from '../order.service';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
+
 
 @Component({
   selector: 'app-order-return-message',
@@ -19,6 +20,7 @@ export class OrderReturnMessageComponent implements OnInit, OnDestroy {
   constructor(public orderService:OrderService) { }
 
   ngOnInit() {
+    moment().tz("Australia/Sydney").format();
     this.getReturnResSub = this.orderService.getReturnResponseUpdateListener()
       .subscribe(res=>{
         
@@ -32,7 +34,9 @@ export class OrderReturnMessageComponent implements OnInit, OnDestroy {
           this.orderStatus = this.returnResponse.message.ProcessedState;
           this.orderNumber = this.returnResponse.message.OrderSummary.NumOrderId ;
           this.orderCustomerName =  this.returnResponse.message.OrderSummary.CustomerName;
-          this.orderProcessDate = moment(this.returnResponse.message.OrderSummary.ProcessDate,"YYYY-MM-DD HH:mm Z"); 
+          
+          var time = moment(this.returnResponse.message.OrderSummary.ProcessDate);
+          this.orderProcessDate = time.tz('Australia/Sydney').format('ddd YYYY/MM/DD hh:mm a z');
         }
 
         //(res.ProcessedOrders.Data != undefined && res.ProcessedOrders.Data != null)
@@ -43,10 +47,10 @@ export class OrderReturnMessageComponent implements OnInit, OnDestroy {
           this.orderNumber = this.returnResponse.orderId ;
           this.orderCustomerName =  this.returnResponse.message.ProcessedOrders.Data[0].cFullName;
           
-          //   var date = new Date(this.returnResponse.ProcessedOrders.Data[0].dProcessedOn);
-          //   var milliseconds = date.getTime(); 
+        
           
-          this.orderProcessDate = moment(this.returnResponse.message.ProcessedOrders.Data[0].dProcessedOn,"YYYY-MM-DD h:mm Z"); 
+          var time = moment(this.returnResponse.message.ProcessedOrders.Data[0].dProcessedOn);
+          this.orderProcessDate = time.tz('Australia/Sydney').format('ddd YYYY/MM/DD hh:mm a z');
         }
         
         
