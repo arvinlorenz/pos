@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import {MatDialog} from '@angular/material';
 
@@ -16,7 +16,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   processCount:number = 0;
   pCountSub: Subscription;
   form: FormGroup;
-
+  @ViewChild("orderNumber") orderField: ElementRef;
   
 
 
@@ -25,7 +25,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     public dialog: MatDialog) { }
 
   ngOnInit() {
-
+    this.orderField.nativeElement.focus();
     this.form = new FormGroup({
       orderNumber: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(6)]
@@ -47,7 +47,12 @@ export class OrderComponent implements OnInit, OnDestroy {
           this.orderService.setReturnResponse(responseData);
           this.orderService.playSuccess();  
           this.form.reset();
+          this.orderField.nativeElement.focus();
         }
+
+
+
+
 
         else if(responseData.ProcessedState === 'NOT_PROCESSED'){
             if(responseData.Message === `The order ${this.form.value.orderNumber} with postal service Tracked requires tracking number`){
@@ -56,9 +61,8 @@ export class OrderComponent implements OnInit, OnDestroy {
                   data: {orderId: responseData.OrderId, notHashedOrderId: this.form.value.orderNumber, form: this.form}
                 });
             
-                dialogRef.afterClosed().subscribe(result => {
-                  console.log(`Dialog result: ${result}`);
-   
+                dialogRef.afterClosed().subscribe(result => {   
+                  this.orderField.nativeElement.focus();
                 });
                 
             }
@@ -66,8 +70,14 @@ export class OrderComponent implements OnInit, OnDestroy {
             else{
               this.orderService.playError(); 
               this.orderService.setReturnResponse(responseData);
+              
             }
+            this.orderField.nativeElement.focus();
         }
+
+
+
+
 
 
         else if(responseData.ProcessedState === 'NOT_FOUND'){
@@ -83,11 +93,17 @@ export class OrderComponent implements OnInit, OnDestroy {
               this.orderService.playError(); 
             }
           })
+          this.orderField.nativeElement.focus();
         }
 
 
+
+
+
+        
         else{
           this.orderService.playError(); 
+          this.orderField.nativeElement.focus();
           console.log(responseData)
         }
     })

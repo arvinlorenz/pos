@@ -25,15 +25,7 @@ export class OrderReturnMessageComponent implements OnInit, OnDestroy {
           this.returnResponse = null;
         }
 
-        else if(res.ProcessedOrders.Data != undefined){
-          this.returnResponse = res;
-          this.orderStatus = 'Order already processed';
-          //this.orderNumber = this.returnResponse.ProcessedState ;
-          this.orderCustomerName =  this.returnResponse.ProcessedOrders.Data[0].ChannelBuyerName;
-          this.orderProcessDate = this.returnResponse.ProcessedOrders.Data[0].dProcessedOn;
-        }
-        
-        else{
+        else if(res.ProcessedState === 'PROCESSED'){
           console.log(this.returnResponse);
           this.returnResponse = res;
           this.orderStatus = this.returnResponse.ProcessedState;
@@ -41,6 +33,17 @@ export class OrderReturnMessageComponent implements OnInit, OnDestroy {
           this.orderCustomerName =  this.returnResponse.OrderSummary.CustomerName;
           this.orderProcessDate = this.returnResponse.OrderSummary.ProcessDate;
         }
+
+        //(res.ProcessedOrders.Data != undefined && res.ProcessedOrders.Data != null)
+        else{
+          this.returnResponse = res;
+          this.orderStatus = 'Order already processed';
+          //this.orderNumber = this.returnResponse.ProcessedState ;
+          this.orderCustomerName =  this.returnResponse.ProcessedOrders.Data[0].ChannelBuyerName;
+          this.orderProcessDate = this.returnResponse.ProcessedOrders.Data[0].dProcessedOn;
+        }
+        
+        
         
       })
   }
