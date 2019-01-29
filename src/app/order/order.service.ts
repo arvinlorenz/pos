@@ -8,7 +8,7 @@ export class OrderService{
     processCount = 0;
     private processCountUpdated = new Subject<number>();
 
-    returnResponse;
+    returnResponse:{message:any,orderId:string};
     private returnResponseUpdated = new Subject<any>();
 
     token = '';
@@ -29,8 +29,8 @@ export class OrderService{
 
 
 
-    setReturnResponse(message){
-        this.returnResponse = message;
+    setReturnResponse(message,orderId){
+        this.returnResponse = {message,orderId};
         console.log(this.returnResponse)
         this.returnResponseUpdated.next(this.returnResponse);
     }

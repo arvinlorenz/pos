@@ -43,8 +43,9 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.orderService.processOrder(this.form.value.orderNumber).subscribe((responseData:any) => {
  
         if(responseData.ProcessedState == 'PROCESSED'){
+          console.log(responseData)
           this.orderService.incrementProcessCount();
-          this.orderService.setReturnResponse(responseData);
+          this.orderService.setReturnResponse(responseData,this.form.value.orderNumber);
           this.orderService.playSuccess();  
           this.form.reset();
           this.orderField.nativeElement.focus();
@@ -69,7 +70,7 @@ export class OrderComponent implements OnInit, OnDestroy {
             
             else{
               this.orderService.playError(); 
-              this.orderService.setReturnResponse(responseData);
+              //this.orderService.setReturnResponse(responseData);
               
             }
             this.orderField.nativeElement.focus();
@@ -84,11 +85,11 @@ export class OrderComponent implements OnInit, OnDestroy {
 
           this.orderService.searchProcessedOrders(this.form.value.orderNumber).subscribe((processedRes:any)=>{
             if(processedRes.ProcessedOrders.Data.length > 0){
-              this.orderService.setReturnResponse(processedRes);
+              this.orderService.setReturnResponse(processedRes,this.form.value.orderNumber);
               this.form.reset();
             }
             else{
-              this.orderService.setReturnResponse('NO DATA FOUND'); 
+              this.orderService.setReturnResponse('NO DATA FOUND',this.form.value.orderNumber); 
               this.form.reset();
               this.orderService.playError(); 
             }
