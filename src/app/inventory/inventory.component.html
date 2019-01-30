@@ -2,27 +2,27 @@
   <mat-card>
       <div class="row">
           <div class="col-4">
-            <form [formGroup]="form" (submit)="processOrder()">
+            <form [formGroup]="form" (submit)="checkSku()">
                 <mat-form-field>
                   <input 
-                    #orderNumber
-                    formControlName="orderNumber"
+                    #skuKey
+                    formControlName="skuKey"
                     matInput 
-                    placeholder="Order Number">
+                    placeholder="SKU Key">
                 </mat-form-field>
                 <button 
                   mat-raised-button
                   color="basic"
                   type="submit"
-                  >Process Order
+                  >Check Info
                 </button>
             </form>
             <br>
-            <p> Count: {{processCount}} </p>
           </div>
           <div class="col-8">
-              <app-order-return-message></app-order-return-message>
-            
+              <router-outlet></router-outlet>
+              
+              <!-- <app-inventory-detail [skuDetails]="skuDetails"></app-inventory-detail>          -->
           </div>
       </div>
 

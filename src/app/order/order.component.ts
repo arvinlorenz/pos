@@ -61,7 +61,7 @@ export class OrderComponent implements OnInit, OnDestroy {
                   width: '250px',
                   data: {orderId: responseData.OrderId, notHashedOrderId: this.form.value.orderNumber, form: this.form}
                 });
-            
+                this.orderService.playError(); 
                 dialogRef.afterClosed().subscribe(result => {   
                   this.orderField.nativeElement.focus();
                 });
@@ -86,6 +86,7 @@ export class OrderComponent implements OnInit, OnDestroy {
           this.orderService.searchProcessedOrders(this.form.value.orderNumber).subscribe((processedRes:any)=>{
             if(processedRes.ProcessedOrders.Data.length > 0){
               this.orderService.setReturnResponse(processedRes,this.form.value.orderNumber);
+              this.orderService.playError(); 
               this.form.reset();
             }
             else{

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderService } from './order/order.service';
+
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { TokenService } from './shared/token.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,9 +10,9 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 export class AppComponent implements OnInit{
   title = 'pos';
 
-  constructor(private orderService: OrderService){}
+  constructor(private tokenService: TokenService){}
   ngOnInit(){
-    this.orderService.getNewToken();
+    this.tokenService.getNewToken();
   }
 
 }

@@ -1,10 +1,20 @@
 import { NgModule } from "../../node_modules/@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { OrderComponent } from "./order/order.component";
+import { InventoryComponent } from "./inventory/inventory.component";
+import { InventoryDetailComponent } from "./inventory/inventory-detail/inventory-detail.component";
 
 
 const routes: Routes = [
     { path: '', component: OrderComponent},
+    { path: 'pos', component: OrderComponent},
+
+    { path: 'sku', component: InventoryComponent,
+    children: [
+      { path: '', component: InventoryDetailComponent },
+      { path: ':itemId', component: InventoryDetailComponent },
+    ]
+  },
     
 ]
 @NgModule({

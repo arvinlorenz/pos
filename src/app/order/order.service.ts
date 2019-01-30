@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
+import { TokenService } from "../shared/token.service";
 
 @Injectable({providedIn:'root'})
 export class OrderService{
@@ -11,12 +12,11 @@ export class OrderService{
     returnResponse:{message:any,orderId:string};
     private returnResponseUpdated = new Subject<any>();
 
-    token = '';
-    tokenIsAvailable = false;
+
     ErrorAudio: HTMLAudioElement = new Audio('sounds/error.wav');
     SuccessAudio: HTMLAudioElement = new Audio('sounds/success.wav');
 
-    constructor(private http: HttpClient, private router: Router){}
+    constructor(private http: HttpClient, private router: Router, private tokenService: TokenService){}
     
     incrementProcessCount(){
         this.processCount++;
@@ -45,33 +45,9 @@ export class OrderService{
     playError(){
         this.ErrorAudio.play();
     }
-    getToken(){
-        return this.token;
-    }
-    getNewToken(){
-        
-         let params = { token : '17568c13cd21c66574768a82d927f697',
-                        applicationId : 'db3695da-e3b3-4d92-8981-5d8dee809f46',
-                        applicationSecret : '2004f0b7-9dae-4a95-9337-feaf450ef996' };
-
-        this.http
-        .get(
-            "https://api.linnworks.net/api/Auth/AuthorizeByApplication",
-            {params}
-        )
-        .subscribe((responseData:any) => {
-            this.token = responseData.Token;
-            this.tokenIsAvailable = true;
-            //console.log(responseData)
-        });
-
-        
-    }
+  
     processOrder(orderId:string){
-        if(this.tokenIsAvailable === false){
-            console.log('no available token yet')
-            return;
-        }
+      
         let url = `https://as-ext.linnworks.net/api/Orders/ProcessOrderByOrderOrReferenceId`;
         let params = {
             request:{
@@ -81,7 +57,7 @@ export class OrderService{
                 "OrderProcessingNotesAcknowledged": true
               }
             }
-        const options = {  headers: new HttpHeaders().set('Authorization', this.token) };
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
     }
 
@@ -96,7 +72,7 @@ export class OrderService{
                 "ManualAdjust": true
               }
             }
-        const options = {  headers: new HttpHeaders().set('Authorization', this.token) };
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
     }
 
@@ -109,7 +85,7 @@ export class OrderService{
                 "ResultsPerPage": 20,
               }
             }
-        const options = {  headers: new HttpHeaders().set('Authorization', this.token) };
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
     }
     

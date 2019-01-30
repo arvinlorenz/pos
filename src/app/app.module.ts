@@ -20,6 +20,10 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalComponent } from './order/modal/modal.component';
 import { OrderReturnMessageComponent } from './order/order-return-message/order-return-message.component';
+import { InventoryComponent } from './inventory/inventory.component';
+import { InventoryDetailComponent } from './inventory/inventory-detail/inventory-detail.component';
+import { TokenService } from './shared/token.service';
+
 
 
 
@@ -29,7 +33,9 @@ import { OrderReturnMessageComponent } from './order/order-return-message/order-
     OrderComponent,
     HeaderComponent,
     ModalComponent,
-    OrderReturnMessageComponent
+    OrderReturnMessageComponent,
+    InventoryComponent,
+    InventoryDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +57,7 @@ import { OrderReturnMessageComponent } from './order/order-return-message/order-
   entryComponents: [
     ModalComponent
   ],
-  providers: [],
+  providers: [TokenService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

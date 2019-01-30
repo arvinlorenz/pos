@@ -1,19 +1,14 @@
 <mat-toolbar color="primary">
     <span><a routerLink="/">Process Order Screen</a></span>
     <span class="spacer"></span>
-    <!-- <ul>
-        <li *ngIf="userIsAuthenticated">
-            <a mat-button routerLink="/create" routerLinkActive="mat-accent">New Post</a>
+    <ul>
+        <li>
+            <a mat-button routerLink="/pos" routerLinkActive="mat-accent">Process Order</a>
         </li>
 
-        <li *ngIf="!userIsAuthenticated">
-            <a mat-button routerLink="auth/login" routerLinkActive="mat-accent">Login</a>
+        <li>
+            <a mat-button routerLink="/sku" routerLinkActive="mat-accent">Inventory</a>
         </li>
-        <li *ngIf="!userIsAuthenticated">
-            <a mat-button routerLink="auth/signup" routerLinkActive="mat-accent">Signup</a>
-        </li>
-        <li *ngIf="userIsAuthenticated">
-            <button mat-button (click)="onLogout()">Logout</button>
-        </li>
-    </ul> -->
+      
+    </ul>
 </mat-toolbar>

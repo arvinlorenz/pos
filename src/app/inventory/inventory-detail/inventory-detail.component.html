@@ -1,0 +1,51 @@
+<mat-card>
+  <div *ngIf="!editMode">
+    <button mat-button *ngIf="skuDetails" [routerLink]="['/sku',skuDetails.itemNumber]">Edit</button>
+    <p> {{skuDetails?.itemNumber}}</p>
+    <p>Quantity: {{skuDetails?.quantity}} </p>
+    <p>Open Orders: {{skuDetails?.openOrder}}</p>
+    <p>Available: {{skuDetails?.available}} </p>
+    <p>Due: {{skuDetails?.due}} </p>
+  </div> 
+  
+  <div *ngIf="editMode">
+    
+    <div class="example-container">
+        <form [formGroup]="form" >
+        <mat-form-field>
+          <input 
+          matInput 
+          placeholder="Item Number"
+          formControlName="itemNumber">
+        </mat-form-field>
+      
+        <mat-form-field>
+            <input 
+            matInput 
+            placeholder="Quantity"
+            formControlName="quantity">
+          </mat-form-field>
+        
+          <mat-form-field>
+              <input 
+              matInput 
+              placeholder="Open Order"
+              formControlName="openOrder">
+            </mat-form-field>
+
+            <mat-form-field>
+                <input 
+                matInput 
+                placeholder="Available"
+                formControlName="available">
+              </mat-form-field>
+              <mat-form-field>
+                  <input 
+                  matInput 
+                  placeholder="Due"
+                  formControlName="due">
+                </mat-form-field>
+          </form>
+      </div>
+  </div>
+</mat-card>
