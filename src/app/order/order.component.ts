@@ -39,7 +39,11 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   processOrder(){
 
-    if(this.form.invalid){return;}
+    if(this.form.invalid){
+      this.form.reset();
+      this.orderService.playError(); 
+      return;
+    }
     this.orderService.processOrder(this.form.value.orderNumber).subscribe((responseData:any) => {
  
         if(responseData.ProcessedState == 'PROCESSED'){
