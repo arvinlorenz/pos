@@ -1,5 +1,5 @@
 
-<mat-card *ngIf="showInfo">
+<mat-card>
     <form [formGroup]="form" >
       <mat-form-field>
         <input 
@@ -36,12 +36,12 @@
         formControlName="due">
       </mat-form-field>
     </form>
-    <mat-card-actions *ngIf="editMode">
+    <mat-card-actions *ngIf="editMode && showButton">
         <button mat-stroked-button (click)="save()" color="primary">SAVE</button>
         <button mat-stroked-button (click)="cancel()" color="warnd">CANCEL</button>
     </mat-card-actions>
 
-    <mat-card-actions *ngIf="!editMode">
+    <mat-card-actions *ngIf="!editMode && showButton">
         <button mat-stroked-button (click)="edit()"color="primary" >EDIT</button>
     </mat-card-actions>
 

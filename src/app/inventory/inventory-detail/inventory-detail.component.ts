@@ -17,7 +17,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
   skuDetailsSub: Subscription;
 
   editMode = false;
-  showInfo = false;
+  showButton = false;
   itemId;
   form: FormGroup;
   @ViewChild("quantity") quantityField: ElementRef;
@@ -33,11 +33,22 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
       .subscribe((skuRes)=>{
         this.skuDetails = skuRes;
       });
-      
-      
-    this.tokenService.tokenUpdateListener().subscribe(a=>{
 
-    })
+    this.form = new FormGroup({
+      itemNumber: new FormControl(null, Validators.required),
+      quantity: new FormControl(null, Validators.required),
+      openOrder: new FormControl(null, Validators.required),
+      available: new FormControl(null, Validators.required),
+      due: new FormControl(null, Validators.required)
+    });
+    this.form.controls.itemNumber.disable();
+    this.form.controls.quantity.disable();
+    this.form.controls.openOrder.disable();
+    this.form.controls.available.disable();
+    this.form.controls.due.disable();
+      
+    
+    this.tokenService.tokenUpdateListener().subscribe(a=>{
       this.route.paramMap
         .subscribe(
         (paramMap: ParamMap)=>{
@@ -53,11 +64,12 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
                   if(resSku.length === 0){
                     this.soundsService.playError();
                     this.form.reset();
+                    this.showButton = false;
                     return;
                   }
                   else{
 
-                    this.showInfo = true;
+                    this.showButton = true;
                     let itemDetails = {
                       itemNumber: resSku[0].ItemNumber,
                       available: resSku[0].Available,
@@ -75,11 +87,6 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
                       available: new FormControl(this.skuDetails.available, Validators.required),
                       due: new FormControl(this.skuDetails.due, Validators.required)
                     });
-                    this.form.controls.itemNumber.disable();
-                    this.form.controls.quantity.disable();
-                    this.form.controls.openOrder.disable();
-                    this.form.controls.available.disable();
-                    this.form.controls.due.disable();
                   }
                 
                 });
@@ -91,10 +98,11 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
                 if(resSku.length === 0){
                   this.soundsService.playError();
                   this.form.reset();
+                  this.showButton = false;
                   return;
                 }
                 else{
-                  this.showInfo = true;
+                  this.showButton = true;
                   let itemDetails = {
                     itemNumber: resSku[0].ItemNumber,
                     available: resSku[0].Available,
@@ -112,11 +120,6 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
                     available: new FormControl(this.skuDetails.available, Validators.required),
                     due: new FormControl(this.skuDetails.due, Validators.required)
                   });
-                  this.form.controls.itemNumber.disable();
-                  this.form.controls.quantity.disable();
-                  this.form.controls.openOrder.disable();
-                  this.form.controls.available.disable();
-                  this.form.controls.due.disable();
                 }
               
               });
@@ -125,6 +128,8 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
           }
         }    
         ); 
+    })
+    
         
   }
 
