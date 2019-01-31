@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { InventoryService } from './inventory.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import {  Router } from '@angular/router';
 
 @Component({
   selector: 'app-inventory',
@@ -13,7 +14,7 @@ export class InventoryComponent implements OnInit {
   skuDetails;
   skuDetailsSub: Subscription;
 
-  constructor(private inventoryService: InventoryService) { }
+  constructor(private inventoryService: InventoryService, private router: Router) { }
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -29,25 +30,8 @@ export class InventoryComponent implements OnInit {
 
 
   checkSku(){
-    this.inventoryService.getSkuDetails(this.form.value.skuKey).subscribe((resSku:any[])=>{
-      if(resSku.length === 0){
-        requestAnimationFrame;
-      }
-      else{
-        console.log(resSku)
-        let itemDetails = {
-          itemNumber: resSku[0].ItemNumber,
-          available: resSku[0].Available,
-          quantity: resSku[0].Quantity,
-          openOrder:resSku[0].InOrder,
-          due: resSku[0].Due,
-          bin: resSku[0].binRack
-  
-        }
-        this.inventoryService.setSkuDetails(itemDetails)
-      }
-      
-    });
+    this.router.navigate(['/sku', this.form.value.skuKey]);
+    
   }
 
 

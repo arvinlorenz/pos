@@ -1,18 +1,25 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { tokenKey } from "@angular/core/src/view";
+import { Subject } from "rxjs";
 
 
 @Injectable({providedIn:'root'})
 export class TokenService{
    
     token;
+    private tokenUpdated = new Subject<any>();
     constructor(private http: HttpClient){}
     
    
     getToken(){
         return this.token;
     }
+
+    tokenUpdateListener(){
+        return this.tokenUpdated.asObservable();
+    }
+
     getNewToken(){
         
          let params = { token : '17568c13cd21c66574768a82d927f697',
@@ -26,7 +33,7 @@ export class TokenService{
         )
         .subscribe((responseData:any) => {
             this.token = responseData.Token;
-
+            this.tokenUpdated.next(this.token)
         });
 
         
