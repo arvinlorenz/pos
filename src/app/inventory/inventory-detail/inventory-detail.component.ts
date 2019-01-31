@@ -65,6 +65,11 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
                     this.soundsService.playError();
                     this.form.reset();
                     this.showButton = false;
+                    this.form.controls.itemNumber.disable();
+                    this.form.controls.quantity.disable();
+                    this.form.controls.openOrder.disable();
+                    this.form.controls.available.disable();
+                    this.form.controls.due.disable();
                     return;
                   }
                   else{
@@ -99,6 +104,11 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
                   this.soundsService.playError();
                   this.form.reset();
                   this.showButton = false;
+                  this.form.controls.itemNumber.disable();
+                  this.form.controls.quantity.disable();
+                  this.form.controls.openOrder.disable();
+                  this.form.controls.available.disable();
+                  this.form.controls.due.disable();
                   return;
                 }
                 else{
