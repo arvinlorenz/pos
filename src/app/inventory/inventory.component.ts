@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { InventoryService } from './inventory.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,7 @@ export class InventoryComponent implements OnInit {
   form;
   skuDetails;
   skuDetailsSub: Subscription;
-
+  @ViewChild("skuKey") skuKeyField: ElementRef;
   constructor(private inventoryService: InventoryService, private router: Router) { }
 
   ngOnInit() {
@@ -22,6 +22,7 @@ export class InventoryComponent implements OnInit {
         validators: [Validators.required]
       })
     });
+    this.skuKeyField.nativeElement.focus();
 
     
 

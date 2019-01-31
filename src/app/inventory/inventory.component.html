@@ -5,6 +5,7 @@
             <form [formGroup]="form" (submit)="checkSku()">
                 <mat-form-field>
                   <input 
+                    #skuKey
                     formControlName="skuKey"
                     matInput 
                     placeholder="SKU Key">
