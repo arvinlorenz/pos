@@ -9,9 +9,19 @@ export class TokenService{
    
     token;
     private tokenUpdated = new Subject<any>();
+
+    ErrorAudio: HTMLAudioElement = new Audio('sounds/error.wav');
+    SuccessAudio: HTMLAudioElement = new Audio('sounds/success.wav');
+
     constructor(private http: HttpClient){}
     
-   
+    playSuccess(){
+        this.SuccessAudio.play();
+    }
+    playError(){
+        this.ErrorAudio.play();
+    }
+
     getToken(){
         return this.token;
     }
@@ -33,7 +43,6 @@ export class TokenService{
         )
         .subscribe((responseData:any) => {
             this.token = responseData.Token;
-            console.log(this.token)
             this.tokenUpdated.next(this.token)
         });
 

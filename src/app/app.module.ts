@@ -23,6 +23,7 @@ import { OrderReturnMessageComponent } from './order/order-return-message/order-
 import { InventoryComponent } from './inventory/inventory.component';
 import { InventoryDetailComponent } from './inventory/inventory-detail/inventory-detail.component';
 import { TokenService } from './shared/token.service';
+import { SoundsService } from './shared/sounds.service';
 
 
 
@@ -57,7 +58,7 @@ import { TokenService } from './shared/token.service';
   entryComponents: [
     ModalComponent
   ],
-  providers: [TokenService],
+  providers: [TokenService,SoundsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

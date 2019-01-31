@@ -13,8 +13,7 @@ export class OrderService{
     private returnResponseUpdated = new Subject<any>();
 
 
-    ErrorAudio: HTMLAudioElement = new Audio('sounds/error.wav');
-    SuccessAudio: HTMLAudioElement = new Audio('sounds/success.wav');
+   
 
     constructor(private http: HttpClient, private router: Router, private tokenService: TokenService){}
     
@@ -39,12 +38,7 @@ export class OrderService{
         return this.returnResponseUpdated.asObservable();
     }
 
-    playSuccess(){
-        this.SuccessAudio.play();
-    }
-    playError(){
-        this.ErrorAudio.play();
-    }
+    
   
     processOrder(orderId:string){
       

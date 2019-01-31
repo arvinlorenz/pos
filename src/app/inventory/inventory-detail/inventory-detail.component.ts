@@ -5,6 +5,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TokenService } from 'src/app/shared/token.service';
 import { tokenKey } from '@angular/core/src/view';
+import { SoundsService } from 'src/app/shared/sounds.service';
 
 @Component({
   selector: 'app-inventory-detail',
@@ -20,14 +21,17 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
   itemId;
   form: FormGroup;
   @ViewChild("quantity") quantityField: ElementRef;
-  constructor(public inventoryService: InventoryService, public tokenService: TokenService, public route: ActivatedRoute) { }
+  constructor(
+      public inventoryService: InventoryService, 
+      public tokenService: TokenService, 
+      public soundsService: SoundsService,
+      public route: ActivatedRoute) { }
 
   ngOnInit() {
 
     this.skuDetailsSub = this.inventoryService.getSkuDetailsUpdateListener()
       .subscribe((skuRes)=>{
         this.skuDetails = skuRes;
-        console.log(this.skuDetails)
       });
       
       
@@ -40,7 +44,6 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
             
           if(paramMap.has('itemId')){
             this.itemId = paramMap.get('itemId');
-            console.log(this.itemId)
             this.editMode = false;
             if(this.tokenService.getToken() === undefined)
             {
@@ -48,10 +51,12 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
                 this.inventoryService.getSkuDetails(this.itemId).subscribe((resSku:any[])=>{
                 
                   if(resSku.length === 0){
+                    this.soundsService.playError();
+                    this.form.reset();
                     return;
                   }
                   else{
-                    console.log(resSku)
+
                     this.showInfo = true;
                     let itemDetails = {
                       itemNumber: resSku[0].ItemNumber,
@@ -84,10 +89,11 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
               this.inventoryService.getSkuDetails(this.itemId).subscribe((resSku:any[])=>{
                 
                 if(resSku.length === 0){
+                  this.soundsService.playError();
+                  this.form.reset();
                   return;
                 }
                 else{
-                  console.log(resSku)
                   this.showInfo = true;
                   let itemDetails = {
                     itemNumber: resSku[0].ItemNumber,
@@ -147,6 +153,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
       .subscribe(a =>{
         this.form.controls.quantity.disable();
         this.editMode = false;
+        this.soundsService.playSuccess();
       })
   }
   ngOnDestroy(){

@@ -5,6 +5,7 @@ import {MatDialog} from '@angular/material';
 import { OrderService } from './order.service';
 import { ModalComponent } from './modal/modal.component';
 import { Subscription } from 'rxjs';
+import { SoundsService } from '../shared/sounds.service';
 
 @Component({
   selector: 'app-order',
@@ -22,6 +23,7 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   constructor(
     private orderService: OrderService,
+    private soundsService: SoundsService,
     public dialog: MatDialog) { }
 
   ngOnInit() {
@@ -41,16 +43,15 @@ export class OrderComponent implements OnInit, OnDestroy {
 
     if(this.form.invalid){
       this.form.reset();
-      this.orderService.playError(); 
+      this.soundsService.playError(); 
       return;
     }
     this.orderService.processOrder(this.form.value.orderNumber).subscribe((responseData:any) => {
  
         if(responseData.ProcessedState == 'PROCESSED'){
-          console.log(responseData)
           this.orderService.incrementProcessCount();
           this.orderService.setReturnResponse(responseData,this.form.value.orderNumber);
-          this.orderService.playSuccess();  
+          this.soundsService.playSuccess();  
           this.form.reset();
           this.orderField.nativeElement.focus();
         }
@@ -65,7 +66,7 @@ export class OrderComponent implements OnInit, OnDestroy {
                   width: '250px',
                   data: {orderId: responseData.OrderId, notHashedOrderId: this.form.value.orderNumber, form: this.form}
                 });
-                this.orderService.playError(); 
+                this.soundsService.playError(); 
                 dialogRef.afterClosed().subscribe(result => {   
                   this.orderField.nativeElement.focus();
                 });
@@ -73,7 +74,7 @@ export class OrderComponent implements OnInit, OnDestroy {
             }
             
             else{
-              this.orderService.playError(); 
+              this.soundsService.playError(); 
               //this.orderService.setReturnResponse(responseData);
               
             }
@@ -90,13 +91,13 @@ export class OrderComponent implements OnInit, OnDestroy {
           this.orderService.searchProcessedOrders(this.form.value.orderNumber).subscribe((processedRes:any)=>{
             if(processedRes.ProcessedOrders.Data.length > 0){
               this.orderService.setReturnResponse(processedRes,this.form.value.orderNumber);
-              this.orderService.playError(); 
+              this.soundsService.playError(); 
               this.form.reset();
             }
             else{
               this.orderService.setReturnResponse('NO DATA FOUND',this.form.value.orderNumber); 
               this.form.reset();
-              this.orderService.playError(); 
+              this.soundsService.playError(); 
             }
           })
           this.orderField.nativeElement.focus();
@@ -108,9 +109,9 @@ export class OrderComponent implements OnInit, OnDestroy {
 
         
         else{
-          this.orderService.playError(); 
+          this.soundsService.playError(); 
           this.orderField.nativeElement.focus();
-          console.log(responseData)
+         
         }
     })
   }

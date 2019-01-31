@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { OrderService } from '../order.service';
+import { SoundsService } from 'src/app/shared/sounds.service';
 
 
 @Component({
@@ -13,7 +14,8 @@ export class ModalComponent implements OnInit{
   successResponse;
   constructor(public dialogRef: MatDialogRef<ModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data,
-    public orderService: OrderService) { }
+    public orderService: OrderService,
+    public soundsService: SoundsService) { }
 
   ngOnInit() {
   }
@@ -29,7 +31,7 @@ export class ModalComponent implements OnInit{
         if(responseData.ProcessedState == 'PROCESSED'){
          
           this.orderService.incrementProcessCount();
-          this.orderService.playSuccess(); 
+          this.soundsService.playSuccess(); 
           this.orderService.setReturnResponse(responseData,this.data.orderId);
           this.data.form.reset();
           this.closeDialog(responseData);
