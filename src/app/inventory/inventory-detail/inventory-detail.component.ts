@@ -92,6 +92,11 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
                       available: new FormControl(this.skuDetails.available, Validators.required),
                       due: new FormControl(this.skuDetails.due, Validators.required)
                     });
+                    this.form.controls.itemNumber.disable();
+                    this.form.controls.quantity.disable();
+                    this.form.controls.openOrder.disable();
+                    this.form.controls.available.disable();
+                    this.form.controls.due.disable();
                   }
                 
                 });
@@ -130,6 +135,11 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
                     available: new FormControl(this.skuDetails.available, Validators.required),
                     due: new FormControl(this.skuDetails.due, Validators.required)
                   });
+                  this.form.controls.itemNumber.disable();
+                    this.form.controls.quantity.disable();
+                    this.form.controls.openOrder.disable();
+                    this.form.controls.available.disable();
+                    this.form.controls.due.disable();
                 }
               
               });
