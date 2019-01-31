@@ -34,4 +34,16 @@ export class InventoryService{
         return  this.http.post(url,params,options);
     }
     
+    setQuantity(sku:string,quantity:string){
+        let url = `https://as-ext.linnworks.net/api/Stock/SetStockLevel`;
+        let params = {
+            stockLevels:[{
+                "SKU": sku,
+                "LocationId": "00000000-0000-0000-0000-000000000000",
+                "Level": quantity
+              }]
+            };
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
+        return  this.http.post(url,params,options);
+    }
 }

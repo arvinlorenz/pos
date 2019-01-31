@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { InventoryService } from '../inventory.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -19,6 +19,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
   showInfo = false;
   itemId;
   form: FormGroup;
+  @ViewChild("quantity") quantityField: ElementRef;
   constructor(public inventoryService: InventoryService, public tokenService: TokenService, public route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -123,11 +124,12 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
 
   edit(){
     this.editMode = true;
-    this.form.controls.itemNumber.enable();
+    //this.form.controls.itemNumber.enable();
     this.form.controls.quantity.enable();
-    this.form.controls.openOrder.enable();
-    this.form.controls.available.enable();
-    this.form.controls.due.enable();
+    this.quantityField.nativeElement.focus();
+    // this.form.controls.openOrder.enable();
+    // this.form.controls.available.enable();
+    // this.form.controls.due.enable();
   }
   cancel(){
     this.editMode = false;
@@ -136,6 +138,16 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
     this.form.controls.openOrder.disable();
     this.form.controls.available.disable();
     this.form.controls.due.disable();
+  }
+
+  save(){
+    let newQuantity = this.form.value.quantity;
+    
+    this.inventoryService.setQuantity(this.itemId,newQuantity)
+      .subscribe(a =>{
+        this.form.controls.quantity.disable();
+        this.editMode = false;
+      })
   }
   ngOnDestroy(){
     this.skuDetailsSub.unsubscribe();
