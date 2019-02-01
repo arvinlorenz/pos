@@ -46,6 +46,19 @@ export class InventoryService{
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
     }
+    setBinRack(StockItemId:string,bin:string){
+        let url = `https://as-ext.linnworks.net/api/Inventory/UpdateItemLocations`;
+        let params = {
+            itemLocations:[{
+                "StockLocationId": "00000000-0000-0000-0000-000000000000",
+                "LocationName": "Default",
+                "BinRack": bin,
+                "StockItemId": StockItemId
+              }]
+            };
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
+        return  this.http.post(url,params,options);
+    }
 
     getBinRackDetail(inventoryItemId: string){
         let url = `https://as-ext.linnworks.net//api/Inventory/GetInventoryItemLocations`;

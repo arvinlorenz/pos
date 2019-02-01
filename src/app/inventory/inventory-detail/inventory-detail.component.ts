@@ -15,6 +15,7 @@ import { SoundsService } from 'src/app/shared/sounds.service';
 export class InventoryDetailComponent implements OnInit, OnDestroy{
   itemDetails;
   skuDetails;
+  itemStockId;
   skuDetailsSub: Subscription;
 
   editMode = false;
@@ -62,7 +63,8 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
           bin: ''
         }
         console.log(resSku[0].StockItemId)
-        this.inventoryService.getBinRackDetail(resSku[0].StockItemId)
+        this.itemStockId = resSku[0].StockItemId;
+        this.inventoryService.getBinRackDetail(this.itemStockId)
           .subscribe((resBin: any[]) =>{
             if(resBin.length === 0){
               this.inventoryService.setSkuDetails(this.itemDetails);
@@ -152,9 +154,17 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
     
     this.inventoryService.setQuantity(this.itemId,newQuantity)
       .subscribe(a =>{
-        this.form.controls.quantity.disable();
-        this.editMode = false;
-        this.soundsService.playSuccess();
+        this.inventoryService.setBinRack(this.itemStockId, this.form.value.bin)
+          .subscribe(a=>{
+            console.log('a',a)
+            if(a===null){
+              this.form.controls.quantity.disable();
+              this.editMode = false;
+              this.soundsService.playSuccess();
+            }
+          
+        })
+        
       })
   }
   ngOnDestroy(){
