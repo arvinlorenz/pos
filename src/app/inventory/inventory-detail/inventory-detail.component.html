@@ -35,6 +35,12 @@
         placeholder="Due"
         formControlName="due">
       </mat-form-field>
+      <mat-form-field>
+        <input 
+        matInput 
+        placeholder="BinRack"
+        formControlName="bin">
+      </mat-form-field>
     </form>
     <mat-card-actions *ngIf="editMode && showButton">
         <button mat-stroked-button (click)="save()" color="primary">SAVE</button>

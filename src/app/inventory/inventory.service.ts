@@ -46,4 +46,11 @@ export class InventoryService{
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
     }
+
+    getBinRackDetail(inventoryItemId: string){
+        let url = `https://as-ext.linnworks.net//api/Inventory/GetInventoryItemLocations`;
+        let params = {inventoryItemId:inventoryItemId};
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
+        return  this.http.post(url,params,options);
+    }
 }

@@ -13,6 +13,7 @@ import { SoundsService } from 'src/app/shared/sounds.service';
   styleUrls: ['./inventory-detail.component.css']
 })
 export class InventoryDetailComponent implements OnInit, OnDestroy{
+  itemDetails;
   skuDetails;
   skuDetailsSub: Subscription;
 
@@ -27,6 +28,73 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
       public soundsService: SoundsService,
       public route: ActivatedRoute) { }
 
+  disableAllFields(){
+    this.form.controls.itemNumber.disable();
+    this.form.controls.quantity.disable();
+    this.form.controls.openOrder.disable();
+    this.form.controls.available.disable();
+    this.form.controls.due.disable();
+    this.form.controls.bin.disable();
+  }
+  skuSubscribe(){
+    this.inventoryService.getSkuDetails(this.itemId).subscribe((resSku:any[])=>{
+                
+      if(resSku.length === 0){
+        this.soundsService.playError();
+        this.form.reset();
+        this.showButton = false;
+        this.form.controls.itemNumber.disable();
+        this.form.controls.quantity.disable();
+        this.form.controls.openOrder.disable();
+        this.form.controls.available.disable();
+        this.form.controls.due.disable();
+        return;
+      }
+      else{
+        console.log(resSku[0]);
+        this.showButton = true;
+        this.itemDetails = {
+          itemNumber: resSku[0].ItemNumber,
+          available: resSku[0].Available,
+          quantity: resSku[0].Quantity,
+          openOrder:resSku[0].InOrder,
+          due: resSku[0].Due,
+          bin: ''
+        }
+        console.log(resSku[0].StockItemId)
+        this.inventoryService.getBinRackDetail(resSku[0].StockItemId)
+          .subscribe((resBin: any[]) =>{
+            if(resBin.length === 0){
+              this.inventoryService.setSkuDetails(this.itemDetails);
+              this.form = new FormGroup({
+                itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
+                quantity: new FormControl(this.skuDetails.quantity, Validators.required),
+                openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
+                available: new FormControl(this.skuDetails.available, Validators.required),
+                due: new FormControl(this.skuDetails.due, Validators.required),
+                bin: new FormControl('-', Validators.required)
+              });
+              this.disableAllFields();
+            }
+            else{
+              this.itemDetails.bin = resBin[0].BinRack;
+              this.inventoryService.setSkuDetails(this.itemDetails);
+              this.form = new FormGroup({
+                itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
+                quantity: new FormControl(this.skuDetails.quantity, Validators.required),
+                openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
+                available: new FormControl(this.skuDetails.available, Validators.required),
+                due: new FormControl(this.skuDetails.due, Validators.required),
+                bin: new FormControl(this.skuDetails.bin, Validators.required)
+              });
+              this.disableAllFields();
+            }
+              
+          }); 
+      }
+    
+    });
+  }
   ngOnInit() {
 
     this.skuDetailsSub = this.inventoryService.getSkuDetailsUpdateListener()
@@ -39,116 +107,11 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
       quantity: new FormControl(null, Validators.required),
       openOrder: new FormControl(null, Validators.required),
       available: new FormControl(null, Validators.required),
-      due: new FormControl(null, Validators.required)
+      due: new FormControl(null, Validators.required),
+      bin: new FormControl(null, Validators.required)
     });
-    this.form.controls.itemNumber.disable();
-    this.form.controls.quantity.disable();
-    this.form.controls.openOrder.disable();
-    this.form.controls.available.disable();
-    this.form.controls.due.disable();
+    this.disableAllFields();
       
-    
-    this.tokenService.tokenUpdateListener().subscribe(a=>{
-      this.route.paramMap
-        .subscribe(
-        (paramMap: ParamMap)=>{
-            
-          if(paramMap.has('itemId')){
-            this.itemId = paramMap.get('itemId');
-            this.editMode = false;
-            if(this.tokenService.getToken() === undefined)
-            {
-              this.tokenService.tokenUpdateListener().subscribe(a=>{
-                this.inventoryService.getSkuDetails(this.itemId).subscribe((resSku:any[])=>{
-                
-                  if(resSku.length === 0){
-                    this.soundsService.playError();
-                    this.form.reset();
-                    this.showButton = false;
-                    this.form.controls.itemNumber.disable();
-                    this.form.controls.quantity.disable();
-                    this.form.controls.openOrder.disable();
-                    this.form.controls.available.disable();
-                    this.form.controls.due.disable();
-                    return;
-                  }
-                  else{
-
-                    this.showButton = true;
-                    let itemDetails = {
-                      itemNumber: resSku[0].ItemNumber,
-                      available: resSku[0].Available,
-                      quantity: resSku[0].Quantity,
-                      openOrder:resSku[0].InOrder,
-                      due: resSku[0].Due,
-                      bin: resSku[0].binRack
-              
-                    }
-                    this.inventoryService.setSkuDetails(itemDetails);
-                    this.form = new FormGroup({
-                      itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
-                      quantity: new FormControl(this.skuDetails.quantity, Validators.required),
-                      openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
-                      available: new FormControl(this.skuDetails.available, Validators.required),
-                      due: new FormControl(this.skuDetails.due, Validators.required)
-                    });
-                    this.form.controls.itemNumber.disable();
-                    this.form.controls.quantity.disable();
-                    this.form.controls.openOrder.disable();
-                    this.form.controls.available.disable();
-                    this.form.controls.due.disable();
-                  }
-                
-                });
-              })
-            }
-            else{
-              this.inventoryService.getSkuDetails(this.itemId).subscribe((resSku:any[])=>{
-                
-                if(resSku.length === 0){
-                  this.soundsService.playError();
-                  this.form.reset();
-                  this.showButton = false;
-                  this.form.controls.itemNumber.disable();
-                  this.form.controls.quantity.disable();
-                  this.form.controls.openOrder.disable();
-                  this.form.controls.available.disable();
-                  this.form.controls.due.disable();
-                  return;
-                }
-                else{
-                  this.showButton = true;
-                  let itemDetails = {
-                    itemNumber: resSku[0].ItemNumber,
-                    available: resSku[0].Available,
-                    quantity: resSku[0].Quantity,
-                    openOrder:resSku[0].InOrder,
-                    due: resSku[0].Due,
-                    bin: resSku[0].binRack
-            
-                  }
-                  this.inventoryService.setSkuDetails(itemDetails);
-                  this.form = new FormGroup({
-                    itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
-                    quantity: new FormControl(this.skuDetails.quantity, Validators.required),
-                    openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
-                    available: new FormControl(this.skuDetails.available, Validators.required),
-                    due: new FormControl(this.skuDetails.due, Validators.required)
-                  });
-                  this.form.controls.itemNumber.disable();
-                    this.form.controls.quantity.disable();
-                    this.form.controls.openOrder.disable();
-                    this.form.controls.available.disable();
-                    this.form.controls.due.disable();
-                }
-              
-              });
-            }
-              
-          }
-        }    
-        ); 
-    })
     this.route.paramMap
         .subscribe(
         (paramMap: ParamMap)=>{
@@ -159,90 +122,11 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
             if(this.tokenService.getToken() === undefined)
             {
               this.tokenService.tokenUpdateListener().subscribe(a=>{
-                this.inventoryService.getSkuDetails(this.itemId).subscribe((resSku:any[])=>{
-                
-                  if(resSku.length === 0){
-                    this.soundsService.playError();
-                    this.form.reset();
-                    this.showButton = false;
-                    this.form.controls.itemNumber.disable();
-                    this.form.controls.quantity.disable();
-                    this.form.controls.openOrder.disable();
-                    this.form.controls.available.disable();
-                    this.form.controls.due.disable();
-                    return;
-                  }
-                  else{
-
-                    this.showButton = true;
-                    let itemDetails = {
-                      itemNumber: resSku[0].ItemNumber,
-                      available: resSku[0].Available,
-                      quantity: resSku[0].Quantity,
-                      openOrder:resSku[0].InOrder,
-                      due: resSku[0].Due,
-                      bin: resSku[0].binRack
-              
-                    }
-                    this.inventoryService.setSkuDetails(itemDetails);
-                    this.form = new FormGroup({
-                      itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
-                      quantity: new FormControl(this.skuDetails.quantity, Validators.required),
-                      openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
-                      available: new FormControl(this.skuDetails.available, Validators.required),
-                      due: new FormControl(this.skuDetails.due, Validators.required)
-                    });
-                    this.form.controls.itemNumber.disable();
-                    this.form.controls.quantity.disable();
-                    this.form.controls.openOrder.disable();
-                    this.form.controls.available.disable();
-                    this.form.controls.due.disable();
-                  }
-                
-                });
+                this.skuSubscribe();
               })
             }
             else{
-              this.inventoryService.getSkuDetails(this.itemId).subscribe((resSku:any[])=>{
-                
-                if(resSku.length === 0){
-                  this.soundsService.playError();
-                  this.form.reset();
-                  this.showButton = false;
-                  this.form.controls.itemNumber.disable();
-                  this.form.controls.quantity.disable();
-                  this.form.controls.openOrder.disable();
-                  this.form.controls.available.disable();
-                  this.form.controls.due.disable();
-                  return;
-                }
-                else{
-                  this.showButton = true;
-                  let itemDetails = {
-                    itemNumber: resSku[0].ItemNumber,
-                    available: resSku[0].Available,
-                    quantity: resSku[0].Quantity,
-                    openOrder:resSku[0].InOrder,
-                    due: resSku[0].Due,
-                    bin: resSku[0].binRack
-            
-                  }
-                  this.inventoryService.setSkuDetails(itemDetails);
-                  this.form = new FormGroup({
-                    itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
-                    quantity: new FormControl(this.skuDetails.quantity, Validators.required),
-                    openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
-                    available: new FormControl(this.skuDetails.available, Validators.required),
-                    due: new FormControl(this.skuDetails.due, Validators.required)
-                  });
-                  this.form.controls.itemNumber.disable();
-                    this.form.controls.quantity.disable();
-                    this.form.controls.openOrder.disable();
-                    this.form.controls.available.disable();
-                    this.form.controls.due.disable();
-                }
-              
-              });
+              this.skuSubscribe();
             }
               
           }
@@ -253,20 +137,14 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
 
   edit(){
     this.editMode = true;
-    //this.form.controls.itemNumber.enable();
     this.form.controls.quantity.enable();
+    this.form.controls.bin.enable();
     this.quantityField.nativeElement.focus();
-    // this.form.controls.openOrder.enable();
-    // this.form.controls.available.enable();
-    // this.form.controls.due.enable();
+   
   }
   cancel(){
     this.editMode = false;
-    this.form.controls.itemNumber.disable();
-    this.form.controls.quantity.disable();
-    this.form.controls.openOrder.disable();
-    this.form.controls.available.disable();
-    this.form.controls.due.disable();
+    this.disableAllFields();
   }
 
   save(){

@@ -42,7 +42,9 @@ export class TokenService{
             {params}
         )
         .subscribe((responseData:any) => {
+           
             this.token = responseData.Token;
+            console.log(this.token)
             this.tokenUpdated.next(this.token)
         });
 
