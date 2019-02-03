@@ -158,6 +158,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
           .subscribe(a=>{
             console.log('a',a)
             if(a===null){
+              this.form.controls.bin.disable();
               this.form.controls.quantity.disable();
               this.editMode = false;
               this.soundsService.playSuccess();
