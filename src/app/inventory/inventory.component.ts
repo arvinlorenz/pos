@@ -3,6 +3,7 @@ import { InventoryService } from './inventory.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import {  Router } from '@angular/router';
+import { SoundsService } from '../shared/sounds.service';
 
 @Component({
   selector: 'app-inventory',
@@ -14,7 +15,7 @@ export class InventoryComponent implements OnInit {
   skuDetails;
   skuDetailsSub: Subscription;
   @ViewChild("skuKey") skuKeyField: ElementRef;
-  constructor(private inventoryService: InventoryService, private router: Router) { }
+  constructor(private inventoryService: InventoryService, private router: Router, private soundsService: SoundsService) { }
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -28,9 +29,12 @@ export class InventoryComponent implements OnInit {
 
   }
 
-
-
   checkSku(){
+    if(this.form.invalid){
+      this.form.reset();
+      this.soundsService.playError(); 
+      return;
+    }
     this.router.navigate(['/sku', this.form.value.skuKey]);
     
   }
