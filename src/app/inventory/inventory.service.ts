@@ -16,6 +16,7 @@ export class InventoryService{
     setSkuDetails(skuDetails){
         this.skuResponse = skuDetails;
         this.skuResponseUpdated.next(this.skuResponse);
+        
       }
     
     getSkuDetailsUpdateListener(){
@@ -23,7 +24,7 @@ export class InventoryService{
     }
 
     getSkuDetails(sku:string){
-        let url = `https://as-ext.linnworks.net/api/Stock/GetStockItemsByKey`;
+        let url = `${this.tokenService.getServer()}/api/Stock/GetStockItemsByKey`;
         let params = {
             stockIdentifier:{
                 "Key": sku,
@@ -35,7 +36,7 @@ export class InventoryService{
     }
     
     setQuantity(sku:string,quantity:string){
-        let url = `https://as-ext.linnworks.net/api/Stock/SetStockLevel`;
+        let url = `${this.tokenService.getServer()}/api/Stock/SetStockLevel`;
         let params = {
             stockLevels:[{
                 "SKU": sku,
@@ -47,7 +48,7 @@ export class InventoryService{
         return  this.http.post(url,params,options);
     }
     setBinRack(StockItemId:string,bin:string){
-        let url = `https://as-ext.linnworks.net/api/Inventory/UpdateItemLocations`;
+        let url = `${this.tokenService.getServer()}/api/Inventory/UpdateItemLocations`;
         let params = {
             itemLocations:[{
                 "StockLocationId": "00000000-0000-0000-0000-000000000000",
@@ -61,7 +62,7 @@ export class InventoryService{
     }
 
     getBinRackDetail(inventoryItemId: string){
-        let url = `https://as-ext.linnworks.net//api/Inventory/GetInventoryItemLocations`;
+        let url = `${this.tokenService.getServer()}//api/Inventory/GetInventoryItemLocations`;
         let params = {inventoryItemId:inventoryItemId};
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);

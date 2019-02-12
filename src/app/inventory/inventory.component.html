@@ -1,7 +1,7 @@
 
   <mat-card>
       <div class="row">
-          <div class="col-4">
+          <div class="col">
             <form [formGroup]="form" (submit)="checkSku()">
                 <mat-form-field>
                   <input 
@@ -19,10 +19,10 @@
             </form>
             <br>
           </div>
-          <div class="col-8">
-              <router-outlet></router-outlet>
-              
-              <!-- <app-inventory-detail [skuDetails]="skuDetails"></app-inventory-detail>          -->
+      </div>
+      <div class="row">
+          <div class="col">
+                <router-outlet></router-outlet>
           </div>
       </div>
 

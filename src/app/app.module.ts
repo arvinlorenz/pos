@@ -9,6 +9,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import {MatDialogModule} from '@angular/material/dialog';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { environment } from '../environments/environment.prod';
 
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
@@ -16,6 +19,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTableModule} from '@angular/material/table';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatMenuModule} from '@angular/material/menu';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalComponent } from './order/modal/modal.component';
@@ -24,6 +29,7 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { InventoryDetailComponent } from './inventory/inventory-detail/inventory-detail.component';
 import { TokenService } from './shared/token.service';
 import { SoundsService } from './shared/sounds.service';
+import { SettingsComponent } from './settings/settings.component';
 
 
 
@@ -36,7 +42,8 @@ import { SoundsService } from './shared/sounds.service';
     ModalComponent,
     OrderReturnMessageComponent,
     InventoryComponent,
-    InventoryDetailComponent
+    InventoryDetailComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +52,12 @@ import { SoundsService } from './shared/sounds.service';
     FormsModule,
     HttpClientModule,
     
+
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule,
+    
+
+
     MatCardModule,
     MatInputModule,
     MatToolbarModule,
@@ -52,6 +65,8 @@ import { SoundsService } from './shared/sounds.service';
     MatDialogModule,
     MatTableModule,
     MatFormFieldModule,
+    MatProgressSpinnerModule,
+    MatMenuModule,
 
     BrowserAnimationsModule
   ],

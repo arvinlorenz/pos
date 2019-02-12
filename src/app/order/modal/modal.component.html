@@ -1,12 +1,20 @@
 
+
 <h1 mat-dialog-title>Needs tracking number for {{data.notHashedOrderId}}</h1>
+<form [formGroup]="form" (submit)="processTrackingNumber()">
 <div mat-dialog-content>
   <p>Tracking Number</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="trackingNumber">
-  </mat-form-field>
+    <mat-form-field>
+      <input 
+      matInput 
+      #trackingNumber
+      formControlName="trackingNumber" 
+      >
+    
+    </mat-form-field>
 </div>
 
-<div mat-dialog-actions>
-  <button mat-button (click)="processTrackingNumber()" cdkFocusInitial>Process!</button>
-</div>
+  <div mat-dialog-actions>
+    <button mat-button type="submit">Process!</button>
+  </div>
+</form>

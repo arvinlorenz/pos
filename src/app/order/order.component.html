@@ -1,7 +1,7 @@
-
+<!-- <mat-spinner *ngIf="!tokenAvailable"></mat-spinner> -->
   <mat-card>
       <div class="row">
-          <div class="col-4">
+          <div class="col">
             <form [formGroup]="form" (submit)="processOrder()">
                 <mat-form-field>
                   <input 
@@ -9,22 +9,25 @@
                     formControlName="orderNumber"
                     matInput 
                     placeholder="Order Number">
-                </mat-form-field>
+                </mat-form-field>    
                 <button 
-                  mat-raised-button
-                  color="basic"
-                  type="submit"
-                  >Process Order
-                </button>
+                    mat-raised-button
+                    color="basic"
+                    type="submit"
+                    >Process Order
+                </button> 
             </form>
-            <br>
-            <p> Count: {{processCount}} </p>
-          </div>
-          <div class="col-8">
-              <app-order-return-message></app-order-return-message>
-            
           </div>
       </div>
-
+      <div class="row">
+          <div class="col">
+                <p> Count: {{processCount}} </p>
+          </div>         
+      </div>
+      <div class="row">
+        <div class="col">
+            <app-order-return-message></app-order-return-message>
+        </div>
+      </div>
   </mat-card>
 

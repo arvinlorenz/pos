@@ -1,4 +1,6 @@
-
+mat-spinner{
+    margin: 10% auto;
+}
 
 mat-card{
 
@@ -7,6 +9,8 @@ mat-card{
 
 }
 
-.mat-raised-button{
+.mat-raised-button, p{
     border-radius: 0;
+    margin: .5rem 0 .5rem .5rem;
 }
+

@@ -1,14 +1,12 @@
 <mat-toolbar color="primary">
     <span><a routerLink="/">Process Order Screen</a></span>
     <span class="spacer"></span>
-    <ul>
-        <li>
-            <a mat-button routerLink="/pos" routerLinkActive="mat-accent">Process Order</a>
-        </li>
 
-        <li>
-            <a mat-button routerLink="/sku" routerLinkActive="mat-accent">Stock</a>
-        </li>
-      
-    </ul>
+    <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+    <mat-menu #menu="matMenu">
+    <button mat-menu-item routerLink="/pos">Process System</button>
+    <button mat-menu-item routerLink="/sku">Stock</button>
+    </mat-menu>
+    <button mat-button routerLink="/setting">Setting</button>
+    
 </mat-toolbar>
