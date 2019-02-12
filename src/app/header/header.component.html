@@ -2,11 +2,13 @@
     <span><a routerLink="/">Process Order Screen</a></span>
     <span class="spacer"></span>
 
-    <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+    <button mat-button [matMenuTriggerFor]="menu" *ngIf="authService.isAuthenticated()">Menu</button>
     <mat-menu #menu="matMenu">
     <button mat-menu-item routerLink="/pos">Process System</button>
     <button mat-menu-item routerLink="/sku">Stock</button>
     </mat-menu>
-    <button mat-button routerLink="/setting">Setting</button>
+    <button mat-button routerLink="/setting" *ngIf="authService.isAuthenticated()">Setting</button>
+    <button mat-button routerLink="/login" *ngIf="!authService.isAuthenticated()">Login</button>
+    <button mat-button (click)="onLogout()" *ngIf="authService.isAuthenticated()">Logout</button>
     
 </mat-toolbar>

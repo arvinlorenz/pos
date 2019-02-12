@@ -25,7 +25,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       applicationSecret: new FormControl(null, Validators.required),
     });
 
-    this.tokenService.realTimeUpdateToken();
+    
 
     this.fullName = this.tokenService.getName();
     this.tokenSub = this.tokenService.nameUpdateListener().subscribe(name=>{

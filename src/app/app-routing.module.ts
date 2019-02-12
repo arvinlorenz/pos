@@ -4,18 +4,22 @@ import { OrderComponent } from "./order/order.component";
 import { InventoryComponent } from "./inventory/inventory.component";
 import { InventoryDetailComponent } from "./inventory/inventory-detail/inventory-detail.component";
 import { SettingsComponent } from "./settings/settings.component";
+import { LoginComponent } from "./auth/login/login.component";
+import { HomeComponent } from "./home/home.component";
+import { AuthGuard } from "./auth/auth.guard";
 
 
 const routes: Routes = [
-    { path: '', component: OrderComponent},
-    { path: 'setting', component: SettingsComponent},
-    { path: 'pos', component: OrderComponent},
+    { path: '', component: HomeComponent},
+    { path: 'setting', component: SettingsComponent, canActivate: [AuthGuard]},
+    { path: 'pos', component: OrderComponent, canActivate: [AuthGuard]},
     { path: 'sku', component: InventoryComponent,
     children: [
       { path: '', component: InventoryDetailComponent },
       { path: ':itemId', component: InventoryDetailComponent },
-    ]
+    ], canActivate: [AuthGuard]
   },
+  { path: 'login', component: LoginComponent},
     
 ]
 @NgModule({

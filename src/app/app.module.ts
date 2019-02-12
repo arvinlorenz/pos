@@ -31,6 +31,9 @@ import { TokenService } from './shared/token.service';
 import { SoundsService } from './shared/sounds.service';
 import { SettingsComponent } from './settings/settings.component';
 import { TokenInterceptor } from './shared/token.interceptor';
+import { LoginComponent } from './auth/login/login.component';
+import { HomeComponent } from './home/home.component';
+import { AuthGuard } from './auth/auth.guard';
 
 
 
@@ -44,7 +47,9 @@ import { TokenInterceptor } from './shared/token.interceptor';
     OrderReturnMessageComponent,
     InventoryComponent,
     InventoryDetailComponent,
-    SettingsComponent
+    SettingsComponent,
+    LoginComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -74,7 +79,7 @@ import { TokenInterceptor } from './shared/token.interceptor';
   entryComponents: [
     ModalComponent
   ],
-  providers: [TokenService,SoundsService,{provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}],
+  providers: [AuthGuard,TokenService,SoundsService,{provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
