@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TokenService } from '../shared/token.service';
 import { Subscription } from 'rxjs';
+import { SoundsService } from '../shared/sounds.service';
 
 @Component({
   selector: 'app-settings',
@@ -13,7 +14,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   credentials;
   fullName;
   tokenSub: Subscription;
-  constructor(private tokenService: TokenService) { }
+  constructor(private tokenService: TokenService, private soundService: SoundsService) { }
 
   ngOnInit() {
     this.credentials = this.tokenService.getCredentials();
@@ -30,6 +31,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   updateToken(){
+    if(this.form.invalid){
+      this.soundService.playError();
+    }
     this.tokenService.updateToken(this.form.value.token,
                                   this.form.value.applicationId,
                                   this.form.value.applicationSecret);

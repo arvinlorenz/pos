@@ -3,7 +3,7 @@
     <span class="spacer"></span>
 
     <button mat-button [matMenuTriggerFor]="menu">Menu</button>
-    <mat-menu #menu="matMenu">
+    <mat-menu #menu="matMenu" resetActiveItem>
     <button mat-menu-item routerLink="/pos">Process System</button>
     <button mat-menu-item routerLink="/sku">Stock</button>
     </mat-menu>
