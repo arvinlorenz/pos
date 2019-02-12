@@ -33,6 +33,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     public route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.orderField.nativeElement.focus();
     this.processCount = this.orderService.getCount();
 
     this.tokenSub = this.tokenService.tokenUpdateListener()
@@ -99,7 +100,7 @@ export class OrderComponent implements OnInit, OnDestroy {
                   this.orderField.nativeElement.focus();
                     
               }
-              
+            
               else{
                 this.soundsService.playError(); 
                 //this.orderService.setReturnResponse(responseData);
@@ -131,7 +132,13 @@ export class OrderComponent implements OnInit, OnDestroy {
   
   
   
-  
+          // else if(responseData.Message === 'Invalid applicationId or applicationsecret.'){
+          //   this.tokenService.getNewToken();
+          //   this.tokenService.tokenUpdateListener()
+          //     .subscribe(a=>{
+          //       this.processOrder();
+          //     })
+          // }
   
           
           else{

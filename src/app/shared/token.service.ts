@@ -50,7 +50,11 @@ export class TokenService{
     nameUpdateListener(){
         return this.nameUpdated.asObservable();
     }
-
+    // realTimeUpdateToken(){
+    //     this.apiTokenRef.valueChanges().subscribe(a=>{
+    //         console.log(a)
+    //     })
+    // }
     getNewToken(){
         this.http.get('https://arvin-8a261.firebaseio.com/apiToken.json')
         .subscribe((tokenRes:any)=>{
@@ -65,6 +69,7 @@ export class TokenService{
                 {params}
             )
             .subscribe((responseData:any) => {
+                console.log('SAVED')
                 this.accountFullname = responseData.FullName;
                 this.token = responseData.Token;
                 this.server = responseData.Server;
@@ -74,7 +79,7 @@ export class TokenService{
         })
 
 
-
+        
         //TEST
         //  let params = { token : '17568c13cd21c66574768a82d927f697',
         //                 applicationId : 'db3695da-e3b3-4d92-8981-5d8dee809f46',
@@ -92,6 +97,7 @@ export class TokenService{
         
     }
 
+    
     updateToken(token:string,applicationId:string,applicationSecret:string){
         let params = { token, applicationId, applicationSecret};
         this.http
@@ -121,5 +127,27 @@ export class TokenService{
     
     }
     
-    
+    // getNewTokenFake(){
+    //     this.http.get('https://arvin-8a261.firebaseio.com/apiToken.json')
+    //     .subscribe((tokenRes:any)=>{
+    //         let params = { token : "17568c13cd21c66574768a82d927f697dfs",
+    //                     applicationId : "db3695da-e3b3-4d92-8981-5kamoted8dee809f46",
+    //                     applicationSecret : "2004f0b7-9dae-4a95-93dkjf37-feaf450ef996" };
+    //         this.createCredentials = params;
+            
+    //         this.http
+    //         .get(
+    //             "https://api.linnworks.net/api/Auth/AuthorizeByApplication",
+    //             {params}
+    //         )
+    //         .subscribe((responseData:any) => {
+    //             this.accountFullname = responseData.FullName;
+    //             this.token = responseData.Token;
+    //             this.server = responseData.Server;
+    //             this.tokenUpdated.next(this.token);
+    //             this.nameUpdated.next(this.accountFullname);
+    //         });
+    //     })
+    // }
+
 }

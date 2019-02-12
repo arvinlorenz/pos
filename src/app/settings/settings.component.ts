@@ -17,12 +17,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
   constructor(private tokenService: TokenService, private soundService: SoundsService) { }
 
   ngOnInit() {
+
     this.credentials = this.tokenService.getCredentials();
     this.form = new FormGroup({
       token: new FormControl(null, Validators.required),
       applicationId: new FormControl(null, Validators.required),
       applicationSecret: new FormControl(null, Validators.required),
     });
+
+    this.tokenService.realTimeUpdateToken();
 
     this.fullName = this.tokenService.getName();
     this.tokenSub = this.tokenService.nameUpdateListener().subscribe(name=>{

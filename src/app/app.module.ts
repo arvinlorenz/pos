@@ -6,7 +6,7 @@ import { OrderComponent } from './order/order.component';
 import { HeaderComponent } from './header/header.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {MatDialogModule} from '@angular/material/dialog';
 
 import { AngularFireModule } from 'angularfire2';
@@ -30,6 +30,7 @@ import { InventoryDetailComponent } from './inventory/inventory-detail/inventory
 import { TokenService } from './shared/token.service';
 import { SoundsService } from './shared/sounds.service';
 import { SettingsComponent } from './settings/settings.component';
+import { TokenInterceptor } from './shared/token.interceptor';
 
 
 
@@ -73,7 +74,7 @@ import { SettingsComponent } from './settings/settings.component';
   entryComponents: [
     ModalComponent
   ],
-  providers: [TokenService,SoundsService],
+  providers: [TokenService,SoundsService,{provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
