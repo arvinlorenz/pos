@@ -34,6 +34,8 @@ import { TokenInterceptor } from './shared/token.interceptor';
 import { LoginComponent } from './auth/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth/auth.guard';
+import { MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
+import { NavigationComponent } from './navigation/navigation.component';
 
 
 
@@ -43,6 +45,7 @@ import { AuthGuard } from './auth/auth.guard';
     AppComponent,
     OrderComponent,
     HeaderComponent,
+    NavigationComponent,
     ModalComponent,
     OrderReturnMessageComponent,
     InventoryComponent,
@@ -50,6 +53,7 @@ import { AuthGuard } from './auth/auth.guard';
     SettingsComponent,
     LoginComponent,
     HomeComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -73,6 +77,9 @@ import { AuthGuard } from './auth/auth.guard';
     MatFormFieldModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
 
     BrowserAnimationsModule
   ],

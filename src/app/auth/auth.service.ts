@@ -3,10 +3,12 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import * as firebase from 'firebase';
+import { Subject } from "rxjs";
 
 
 @Injectable({providedIn:'root'})
 export class AuthService{
+    private authTokenUpdated = new Subject<any>();
     token:string;
     userId:string;
     usersRef: AngularFireList<{userId:string, name:string,email:string, role:string}>;
@@ -20,7 +22,13 @@ export class AuthService{
             (token: string) => this.token = token
             );
         return this.token;
-        }
+    }
+    
+    authTokenUpdateListener(){
+        return this.authTokenUpdated.asObservable();
+    }
+       
+    
     signupUser(name:string, email: string, password: string) {
         
         firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -50,6 +58,7 @@ export class AuthService{
             .then(
                 (token: string) => {
                     this.token = token;
+                    this.authTokenUpdated.next(this.token);
                     this.router.navigate(['/']);
                 }
             )
@@ -63,12 +72,19 @@ export class AuthService{
     logout() {
         firebase.auth().signOut();
         this.token = null;
+        this.authTokenUpdated.next(this.token);
         this.router.navigate(['/login']);
       
     }
     
     isAuthenticated() {
-      return this.token != null;
+        if(this.token !=null){
+            return true;
+        }
+        else{
+            return false
+        }
+    
     }
 
 
