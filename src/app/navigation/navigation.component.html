@@ -1,9 +1,16 @@
-<nav class="navbar navbar-expand navbar-dark bg-primary"> <a  href="#menu-toggle" id="menu-toggle" class="navbar-brand"><span class="navbar-toggler-icon"></span></a> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+<nav class="navbar navbar-expand navbar-dark bg-primary"> 
+    <a class="navbar-brand" href="#">PROCESS ORDER SYSTEM  </a>
+  
   <div class="collapse navbar-collapse" id="navbarsExample02">
-      <ul class="navbar-nav mr-auto">
+      <ul class="navbar-nav ml-auto">
           <li class="nav-item"> <a class="nav-link" routerLink="/setting" *ngIf="authService.isAuthenticated()">Settings <span class="sr-only">(current)</span></a> </li>
           <li class="nav-item"> <a class="nav-link" routerLink="/login" *ngIf="!authService.isAuthenticated()">Login</a> </li>
           <li class="nav-item"> <a class="nav-link" (click)="onLogout()" *ngIf="authService.isAuthenticated()">Logout</a> </li>
+          <li class="nav-item">
+            <a  class="nav-link" href="#menu-toggle" id="menu-toggle">
+              <span class="navbar-toggler-icon"></span>
+            </a> 
+          </li>
       </ul>
       <form class="form-inline my-2 my-md-0"> </form>
   </div>
@@ -12,7 +19,7 @@
   <!-- Sidebar -->
   <div id="sidebar-wrapper">
       <ul class="sidebar-nav">
-          <li class="sidebar-brand"> <a>Quick Links </a> </li>
+          <li class="sidebar-brand"> <a href="#menu-toggle" id="menu-toggle1">Quick Links </a> </li>
           <li> <a routerLink="/pos">Process System</a> </li>
           <li> <a routerLink="/sku">Stock</a> </li>
 

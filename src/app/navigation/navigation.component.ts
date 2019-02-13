@@ -14,10 +14,16 @@ export class NavigationComponent implements OnInit {
   ngOnInit() {
     if(!this.authService.isAuthenticated()){
       $("#wrapper").removeClass("toggled");
+      $("#menu-toggle").hide();
     }
     else{
+      $("#menu-toggle").show();
       $("#wrapper").addClass("toggled");
       $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+      });
+      $("#menu-toggle1").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
       });
@@ -35,8 +41,18 @@ export class NavigationComponent implements OnInit {
     this.authService.authTokenUpdateListener().subscribe(a=>{
 
   
-      $("#wrapper").addClass("toggled");
+      if(!this.authService.isAuthenticated()){
+        $("#wrapper").removeClass("toggled");
+        $("#menu-toggle").hide();
+      }
+      else{
+        $("#menu-toggle").show();
+        $("#wrapper").addClass("toggled");
         $("#menu-toggle").click(function(e) {
+          e.preventDefault();
+          $("#wrapper").toggleClass("toggled");
+        });
+        $("#menu-toggle1").click(function(e) {
           e.preventDefault();
           $("#wrapper").toggleClass("toggled");
         });
@@ -48,6 +64,7 @@ export class NavigationComponent implements OnInit {
             $("#wrapper").addClass("toggled");
           }
         });
+      }
       
       
     })
