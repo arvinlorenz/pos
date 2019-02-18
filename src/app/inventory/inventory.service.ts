@@ -26,7 +26,7 @@ export class InventoryService{
     }
 
     getSkuDetails(sku:string){
-        let url = `https://as-ext.linnworks.net/api/Stock/GetStockItemsByKey`;
+        let url = `${this.tokenService.getServer()}/api/Stock/GetStockItemsByKey`;
         let params = {
             stockIdentifier:{
                 "Key": sku,
@@ -36,9 +36,16 @@ export class InventoryService{
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
     }
-    
+    getItemImage(StockItemId){
+        let url = `${this.tokenService.getServer()}/api/Inventory/GetInventoryItemImages`;
+        let params = {
+            inventoryItemId:StockItemId
+            }
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
+        return  this.http.post(url,params,options);
+    }
     setQuantity(sku:string,quantity:string){
-        let url = `https://as-ext.linnworks.net/api/Stock/SetStockLevel`;
+        let url = `${this.tokenService.getServer()}/api/Stock/SetStockLevel`;
         let params = {
             stockLevels:[{
                 "SKU": sku,

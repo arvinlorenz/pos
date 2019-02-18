@@ -1,7 +1,11 @@
 <mat-tab-group>
   <mat-tab label="Details"> 
       <mat-card>
+          <div class="item-image" *ngIf="imagePath">
+              <img [src]="imagePath" [alt]="itemDetails.itemTitle">
+          </div>
           <form [formGroup]="form" (submit)="save()">
+            
             <mat-form-field>
               <input 
               matInput 

@@ -17,7 +17,7 @@ export class InventoryWithProvidersComponent implements OnInit, OnDestroy{
   itemStockId;
   skuDetailsSub: Subscription;
   tokenSub: Subscription;
-
+  imagePath = null;
   editMode = false;
   showButton = false;
   itemId;
@@ -82,6 +82,7 @@ export class InventoryWithProvidersComponent implements OnInit, OnDestroy{
         this.form.reset();
         this.showButton = false;
         this.suppliers = [];
+        this.imagePath = null;
         this.disableAllFields();
         return;
       }
@@ -112,6 +113,21 @@ export class InventoryWithProvidersComponent implements OnInit, OnDestroy{
         this.itemStockId = resSku[0].StockItemId;
 
         this.inventoryService.setSkuDetails(this.itemDetails);
+        this.inventoryService.getItemImage(this.itemStockId)
+          .subscribe((img:any[])=>{
+            if(img.length > 0){
+              this.itemDetails.imagePath = img[0].FullSource;
+              this.imagePath = this.itemDetails.imagePath;
+              this.inventoryService.setSkuDetails({...this.itemDetails});
+            }
+            else{
+              this.itemDetails.imagePath = null;
+              this.imagePath = this.itemDetails.imagePath;
+              this.inventoryService.setSkuDetails({...this.itemDetails});
+            }
+            
+            
+          })
         this.form = new FormGroup({
           itemTitle: new FormControl(this.skuDetails.itemTitle, Validators.required),
           itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
@@ -140,39 +156,6 @@ export class InventoryWithProvidersComponent implements OnInit, OnDestroy{
             this.inventoryService.setSuppliers(this.suppliers);
           })
         this.disableAllFields();
-          //GETTING BIN RACK
-        // this.itemStockId = resSku[0].StockItemId;
-        // this.inventoryService.getBinRackDetail(this.itemStockId)
-        //   .subscribe((resBin: any[]) =>{
-        //     if(resBin.length === 0){
-        //       this.inventoryService.setSkuDetails(this.itemDetails);
-        //       this.form = new FormGroup({
-        //         itemTitle: new FormControl(this.skuDetails.itemTitle, Validators.required),
-        //         itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
-        //         quantity: new FormControl(this.skuDetails.quantity, Validators.required),
-        //         openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
-        //         available: new FormControl(this.skuDetails.available, Validators.required),
-        //         due: new FormControl(this.skuDetails.due, Validators.required),
-        //         bin: new FormControl('-', Validators.required)
-        //       });
-        //       this.disableAllFields();
-        //     }
-        //     else{
-        //       this.itemDetails.bin = resBin[0].BinRack;
-        //       this.inventoryService.setSkuDetails(this.itemDetails);
-        //       this.form = new FormGroup({
-        //         itemTitle: new FormControl(this.skuDetails.itemTitle, Validators.required),
-        //         itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
-        //         quantity: new FormControl(this.skuDetails.quantity, Validators.required),
-        //         openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
-        //         available: new FormControl(this.skuDetails.available, Validators.required),
-        //         due: new FormControl(this.skuDetails.due, Validators.required),
-        //         bin: new FormControl(this.skuDetails.bin, Validators.required)
-        //       });
-        //       this.disableAllFields();
-        //     }
-              
-        //   }); 
       }
     
     });
@@ -203,7 +186,6 @@ export class InventoryWithProvidersComponent implements OnInit, OnDestroy{
           weight: this.skuDetails.weight,
           batchNumberScanRequired: this.skuDetails.batchNumberScanRequired,
           serialNumberScanRequired: this.skuDetails.serialNumberScanRequired,
-          
         });
       });
 
@@ -228,7 +210,6 @@ export class InventoryWithProvidersComponent implements OnInit, OnDestroy{
       weight: new FormControl(null, Validators.required),
       batchNumberScanRequired: new FormControl(null, Validators.required),
       serialNumberScanRequired: new FormControl(null, Validators.required),
-      
     });
     this.disableAllFields();
     
@@ -243,7 +224,6 @@ export class InventoryWithProvidersComponent implements OnInit, OnDestroy{
             {
               this.tokenSub = this.tokenService.tokenUpdateListener().subscribe(a=>{
                 this.skuSubscribe();
-                
               })
             }
             else{
@@ -267,25 +247,6 @@ export class InventoryWithProvidersComponent implements OnInit, OnDestroy{
   }
 
   save(){
-    // let newQuantity = this.form.value.quantity;
-    // let available;
-    // this.inventoryService.setQuantity(this.itemId,newQuantity)
-    //   .subscribe(a =>{
-    //     available = a[0].Available;
-    //     this.inventoryService.setBinRack(this.itemStockId, this.form.value.bin)
-    //       .subscribe((a:any)=>{
-            
-    //         if(a===null){
-    //           this.inventoryService.setSkuDetails({...this.skuDetails, available ,quantity: newQuantity, bin:this.form.value.bin})
-    //           this.disableAllFields();
-    //           this.editMode = false;
-    //           this.soundsService.playSuccess();
-    //         }
-          
-    //     })
-        
-    //   })
-
     let itemTitle = this.form.value.itemTitle;
     let itemNumber = this.form.value.itemNumber;
     let quantity = this.form.value.quantity;
