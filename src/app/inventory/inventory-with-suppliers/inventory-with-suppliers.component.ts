@@ -103,27 +103,41 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
           postalServiceId: resSku[0].PostalServiceId,
           categoryId: resSku[0].CategoryId,
           packageGroupId: resSku[0].PackageGroupId,
-          height: resSku[0].Height,
-          width: resSku[0].Width,
-          depth:resSku[0].Depth,
-          weight: resSku[0].Weight,
+          height: '-',
+          width: '-',
+          depth:'-',
+          weight: '-',
           batchNumberScanRequired:resSku[0].BatchNumberScanRequired,
           serialNumberScanRequired: resSku[0].SerialNumberScanRequired      
         }
         this.itemStockId = resSku[0].StockItemId;
 
         this.inventoryService.setSkuDetails(this.itemDetails);
+        this.inventoryService.getItemDimentions()
+          .subscribe((res:any)=>{
+            let dimentionsData = res.Data.filter(data=>{
+              return data.StockItemId === this.itemStockId;
+            })
+            this.itemDetails = {
+              ...this.itemDetails,
+              height: dimentionsData[0].Height,
+              width: dimentionsData[0].Width,
+              depth:dimentionsData[0].Depth,
+              weight: dimentionsData[0].Weight,
+            }
+            this.inventoryService.setSkuDetails(this.itemDetails);
+          })
         this.inventoryService.getItemImage(this.itemStockId)
           .subscribe((img:any[])=>{
             if(img.length > 0){
-              this.itemDetails.imagePath = img[0].FullSource;
-              this.imagePath = this.itemDetails.imagePath;
-              this.inventoryService.setSkuDetails({...this.itemDetails});
+             
+              this.imagePath = img[0].FullSource;
+              this.inventoryService.setSkuDetails({...this.itemDetails, imagePath: this.imagePath});
             }
             else{
               this.itemDetails.imagePath = null;
               this.imagePath = this.itemDetails.imagePath;
-              this.inventoryService.setSkuDetails({...this.itemDetails});
+              this.inventoryService.setSkuDetails({...this.itemDetails, imagePath: this.imagePath});
             }
             
             
