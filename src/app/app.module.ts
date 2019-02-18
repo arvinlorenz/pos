@@ -11,7 +11,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
-import { environment } from '../environments/environment.prod';
+import { environment } from '../environments/environment';
 
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
@@ -34,8 +34,12 @@ import { TokenInterceptor } from './shared/token.interceptor';
 import { LoginComponent } from './auth/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth/auth.guard';
-import { MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
+import { MatSidenavModule, MatIconModule, MatListModule, MatTabsModule } from '@angular/material';
 import { NavigationComponent } from './navigation/navigation.component';
+import { InventoryWithProvidersComponent } from './inventory/inventory-with-providers/inventory-with-providers.component';
+import { SuppliersComponent } from './inventory/suppliers/suppliers.component';
+import { SupplierEditComponent } from './inventory/suppliers/supplier-edit/supplier-edit.component';
+
 
 
 
@@ -52,7 +56,10 @@ import { NavigationComponent } from './navigation/navigation.component';
     InventoryDetailComponent,
     SettingsComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    InventoryWithProvidersComponent,
+    SuppliersComponent,
+    SupplierEditComponent
     
   ],
   imports: [
@@ -80,6 +87,7 @@ import { NavigationComponent } from './navigation/navigation.component';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+    MatTabsModule,
 
     BrowserAnimationsModule
   ],

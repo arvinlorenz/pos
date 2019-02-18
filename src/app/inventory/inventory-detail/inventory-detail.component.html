@@ -1,19 +1,11 @@
-
 <mat-card>
-    <form [formGroup]="form" (submit)="save()">
+    <form [formGroup]="form" >
       <mat-form-field>
         <input 
         matInput 
         placeholder="Item Number"
         formControlName="itemNumber">
       </mat-form-field>
-
-      <mat-form-field>
-          <input 
-          matInput 
-          placeholder="Item Name"
-          formControlName="itemName">
-        </mat-form-field>
     
       <mat-form-field>
         <input 
@@ -48,17 +40,14 @@
         placeholder="BinRack"
         formControlName="bin">
       </mat-form-field>
-    
-      <mat-card-actions *ngIf="editMode && showButton">
-          <button 
-            mat-stroked-button 
-            type="submit"  
-            color="primary">SAVE</button>
-          <button mat-stroked-button (click)="cancel()" color="warn">CANCEL</button>
-      </mat-card-actions>
+    </form>
+    <mat-card-actions *ngIf="editMode && showButton">
+        <button mat-stroked-button (click)="save()" color="primary">SAVE</button>
+        <button mat-stroked-button (click)="cancel()" color="warnd">CANCEL</button>
+    </mat-card-actions>
 
-      <mat-card-actions *ngIf="!editMode && showButton">
-          <button mat-stroked-button (click)="edit()"color="primary" >EDIT</button>
-      </mat-card-actions>
-  </form>
+    <mat-card-actions *ngIf="!editMode && showButton">
+        <button mat-stroked-button (click)="edit()"color="primary" >EDIT</button>
+    </mat-card-actions>
+
 </mat-card>

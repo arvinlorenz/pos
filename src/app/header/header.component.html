@@ -7,6 +7,7 @@
     <mat-menu #menu="matMenu">
     <button mat-menu-item routerLink="/pos">Process System</button>
     <button mat-menu-item routerLink="/sku">Stock</button>
+    <button mat-menu-item routerLink="/providers">Providers</button>
     </mat-menu>
     <button mat-button routerLink="/setting" *ngIf="authService.isAuthenticated()">Setting</button>
     <button mat-button routerLink="/login" *ngIf="!authService.isAuthenticated()">Login</button>

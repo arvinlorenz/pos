@@ -4,7 +4,6 @@ import { InventoryService } from '../inventory.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TokenService } from 'src/app/shared/token.service';
-import { tokenKey } from '@angular/core/src/view';
 import { SoundsService } from 'src/app/shared/sounds.service';
 
 @Component({
@@ -15,10 +14,8 @@ import { SoundsService } from 'src/app/shared/sounds.service';
 export class InventoryDetailComponent implements OnInit, OnDestroy{
   itemDetails;
   skuDetails;
-  itemStockId;
   skuDetailsSub: Subscription;
-  tokenSub: Subscription;
-
+  itemStockId;
   editMode = false;
   showButton = false;
   itemId;
@@ -31,7 +28,6 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
       public route: ActivatedRoute) { }
 
   disableAllFields(){
-    this.form.controls.itemName.disable();
     this.form.controls.itemNumber.disable();
     this.form.controls.quantity.disable();
     this.form.controls.openOrder.disable();
@@ -41,12 +37,11 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
   }
   skuSubscribe(){
     this.inventoryService.getSkuDetails(this.itemId).subscribe((resSku:any[])=>{
-                //ItemTitle:
+                
       if(resSku.length === 0){
         this.soundsService.playError();
         this.form.reset();
         this.showButton = false;
-        this.form.controls.itemName.disable();
         this.form.controls.itemNumber.disable();
         this.form.controls.quantity.disable();
         this.form.controls.openOrder.disable();
@@ -55,9 +50,9 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
         return;
       }
       else{
+        console.log(resSku[0]);
         this.showButton = true;
         this.itemDetails = {
-          itemName: resSku[0].ItemTitle,
           itemNumber: resSku[0].ItemNumber,
           available: resSku[0].Available,
           quantity: resSku[0].Quantity,
@@ -66,12 +61,11 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
           bin: ''
         }
         this.itemStockId = resSku[0].StockItemId;
-        this.inventoryService.getBinRackDetail(this.itemStockId)
+        this.inventoryService.getBinRackDetail(resSku[0].StockItemId)
           .subscribe((resBin: any[]) =>{
             if(resBin.length === 0){
               this.inventoryService.setSkuDetails(this.itemDetails);
               this.form = new FormGroup({
-                itemName: new FormControl(this.skuDetails.itemName, Validators.required),
                 itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
                 quantity: new FormControl(this.skuDetails.quantity, Validators.required),
                 openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
@@ -85,7 +79,6 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
               this.itemDetails.bin = resBin[0].BinRack;
               this.inventoryService.setSkuDetails(this.itemDetails);
               this.form = new FormGroup({
-                itemName: new FormControl(this.skuDetails.itemName, Validators.required),
                 itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
                 quantity: new FormControl(this.skuDetails.quantity, Validators.required),
                 openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
@@ -106,19 +99,9 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
     this.skuDetailsSub = this.inventoryService.getSkuDetailsUpdateListener()
       .subscribe((skuRes)=>{
         this.skuDetails = skuRes;
-        this.form.setValue({
-          itemName: this.skuDetails.itemName,
-          itemNumber: this.skuDetails.itemNumber,
-          quantity: this.skuDetails.quantity,
-          openOrder: this.skuDetails.openOrder,
-          available: this.skuDetails.available,
-          due: this.skuDetails.due,
-          bin: this.skuDetails.bin
-        });
       });
 
     this.form = new FormGroup({
-      itemName: new FormControl(null, Validators.required),
       itemNumber: new FormControl(null, Validators.required),
       quantity: new FormControl(null, Validators.required),
       openOrder: new FormControl(null, Validators.required),
@@ -127,7 +110,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
       bin: new FormControl(null, Validators.required)
     });
     this.disableAllFields();
-    
+      
     this.route.paramMap
         .subscribe(
         (paramMap: ParamMap)=>{
@@ -137,7 +120,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
             this.editMode = false;
             if(this.tokenService.getToken() === undefined)
             {
-              this.tokenSub = this.tokenService.tokenUpdateListener().subscribe(a=>{
+              this.tokenService.tokenUpdateListener().subscribe(a=>{
                 this.skuSubscribe();
               })
             }
@@ -164,6 +147,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
   }
 
   save(){
+    console.log('hi')
     let newQuantity = this.form.value.quantity;
     let available;
     this.inventoryService.setQuantity(this.itemId,newQuantity)
@@ -174,8 +158,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
             
             if(a===null){
               this.inventoryService.setSkuDetails({...this.skuDetails, available ,quantity: newQuantity, bin:this.form.value.bin})
-              this.form.controls.bin.disable();
-              this.form.controls.quantity.disable();
+              this.disableAllFields();
               this.editMode = false;
               this.soundsService.playSuccess();
             }
@@ -186,10 +169,6 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
   }
   ngOnDestroy(){
     this.skuDetailsSub.unsubscribe();
-    if(this.tokenSub){
-      this.tokenSub.unsubscribe();
-    }
-    
   }
 
 }

@@ -6,6 +6,7 @@ import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import * as firebase from 'firebase';
 import { map } from "rxjs/operators";
 import { Router } from "@angular/router";
+import { environment } from '../../environments/environment';
 
 @Injectable({providedIn:'root'})
 export class TokenService{
@@ -56,7 +57,8 @@ export class TokenService{
     //     })
     // }
     getNewToken(){
-        this.http.get('https://arvin-8a261.firebaseio.com/apiToken.json')
+        console.log(environment.apiDB)
+        this.http.get(`https://arvin-8a261.firebaseio.com/${environment.apiDB}.json`)
         .subscribe((tokenRes:any)=>{
             let params = { token : tokenRes.token,
                         applicationId : tokenRes.applicationId,
@@ -108,7 +110,7 @@ export class TokenService{
             .subscribe((tokenRes: any)=>{
                     
                     let tokenUpdate = firebase.database().ref();
-                    tokenUpdate.child('apiToken/').update({token,applicationId,applicationSecret}).then(a=>{
+                    tokenUpdate.child(`${environment.apiDB}/`).update({token,applicationId,applicationSecret}).then(a=>{
                         this.playSuccess();
                         this.createCredentials = params;
                         this.accountFullname = tokenRes.FullName;

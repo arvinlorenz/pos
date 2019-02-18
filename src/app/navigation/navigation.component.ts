@@ -12,31 +12,8 @@ export class NavigationComponent implements OnInit {
   constructor(public authService: AuthService) { }
 
   ngOnInit() {
-    if(!this.authService.isAuthenticated()){
-      $("#wrapper").removeClass("toggled");
-      $("#menu-toggle").hide();
-    }
-    else{
-      $("#menu-toggle").show();
-      $("#wrapper").addClass("toggled");
-      $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-      });
-      $("#menu-toggle1").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-      });
-  
-      $(window).resize(function(e) {
-        if($(window).width()<=768){
-          $("#wrapper").removeClass("toggled");
-        }else{
-          $("#wrapper").addClass("toggled");
-        }
-      });
-    }
-    
+    $("#menu-toggle").hide();
+    $("#sidebar-wrapper").hide();
     
     this.authService.authTokenUpdateListener().subscribe(a=>{
 
@@ -44,17 +21,38 @@ export class NavigationComponent implements OnInit {
       if(!this.authService.isAuthenticated()){
         $("#wrapper").removeClass("toggled");
         $("#menu-toggle").hide();
+        $("#sidebar-wrapper").hide();
+        
+        
       }
       else{
         $("#menu-toggle").show();
+        $("#sidebar-wrapper").show();
         $("#wrapper").addClass("toggled");
         $("#menu-toggle").click(function(e) {
           e.preventDefault();
-          $("#wrapper").toggleClass("toggled");
+          if( $('#wrapper').hasClass("toggled")){
+            $('#wrapper').removeClass("toggled");
+          }
+          else{
+            $('#wrapper').addClass("toggled");
+          }
         });
         $("#menu-toggle1").click(function(e) {
           e.preventDefault();
-          $("#wrapper").toggleClass("toggled");
+          if( $('#wrapper').hasClass("toggled")){
+            $('#wrapper').removeClass("toggled");
+          }
+          else{
+            $('#wrapper').addClass("toggled");
+          }
+        });
+        $(".sidebar-item").click(function(e) {
+          if($(window).width()<=768){
+            $("#wrapper").removeClass("toggled");
+          }else{
+            $("#wrapper").addClass("toggled");
+          }
         });
     
         $(window).resize(function(e) {

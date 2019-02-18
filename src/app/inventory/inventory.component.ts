@@ -35,8 +35,9 @@ export class InventoryComponent implements OnInit {
       this.soundsService.playError(); 
       return;
     }
-    this.router.navigate(['/sku', this.form.value.skuKey]);
-    
+  
+    this.router.navigate([this.router.url.split('/')[1], this.form.value.skuKey]);
+   
   }
 
 

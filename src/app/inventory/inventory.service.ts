@@ -11,12 +11,14 @@ export class InventoryService{
     private skuResponseUpdated = new Subject<any>();
     skuDetails;
 
+    suppliers;
+    public editSupplier = new Subject<any>();
+
     constructor(private http: HttpClient, private router: Router, private tokenService: TokenService){}
     
     setSkuDetails(skuDetails){
         this.skuResponse = skuDetails;
         this.skuResponseUpdated.next(this.skuResponse);
-        
       }
     
     getSkuDetailsUpdateListener(){
@@ -24,7 +26,7 @@ export class InventoryService{
     }
 
     getSkuDetails(sku:string){
-        let url = `${this.tokenService.getServer()}/api/Stock/GetStockItemsByKey`;
+        let url = `https://as-ext.linnworks.net/api/Stock/GetStockItemsByKey`;
         let params = {
             stockIdentifier:{
                 "Key": sku,
@@ -36,7 +38,7 @@ export class InventoryService{
     }
     
     setQuantity(sku:string,quantity:string){
-        let url = `${this.tokenService.getServer()}/api/Stock/SetStockLevel`;
+        let url = `https://as-ext.linnworks.net/api/Stock/SetStockLevel`;
         let params = {
             stockLevels:[{
                 "SKU": sku,
@@ -47,6 +49,7 @@ export class InventoryService{
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
     }
+
     setBinRack(StockItemId:string,bin:string){
         let url = `${this.tokenService.getServer()}/api/Inventory/UpdateItemLocations`;
         let params = {
@@ -62,8 +65,78 @@ export class InventoryService{
     }
 
     getBinRackDetail(inventoryItemId: string){
-        let url = `${this.tokenService.getServer()}//api/Inventory/GetInventoryItemLocations`;
+        let url = `https://as-ext.linnworks.net//api/Inventory/GetInventoryItemLocations`;
         let params = {inventoryItemId:inventoryItemId};
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
+        return  this.http.post(url,params,options);
+    }
+
+
+
+    updateInventoryItem(details, itemStockId){
+        let url = `${this.tokenService.getServer()}/api/Inventory/UpdateInventoryItem`;
+        let params = {
+            inventoryItem: {
+                "VariationGroupName":"",
+                "Quantity":details.quantity,"InOrder":details.inOrder,"Due":details.due,"MinimumLevel":details.minimumLevel,"Available":details.available,
+                "CreationDate":null,"IsCompositeParent":false,
+                "ItemNumber":details.itemNumber,"ItemTitle":details.itemTitle,"BarcodeNumber":details.barcodeNumber,
+                "MetaData":"","isBatchedStockType":false,
+                "PurchasePrice":details.purchasePrice,"RetailPrice":details.retailPrice,"TaxRate":details.taxRate,
+                "PostalServiceId":"00000000-0000-0000-0000-000000000000",
+                "PostalServiceName":null,"CategoryId":"00000000-0000-0000-0000-000000000000",
+                "CategoryName":null,"PackageGroupId":"00000000-0000-0000-0000-000000000000",
+                "PackageGroupName":null,"Height":details.height,"Width":details.weight,"Depth":details.depth,"Weight":details.weight,
+                "InventoryTrackingType":0,"BatchNumberScanRequired":details.batchNumberScanRequired,
+                "SerialNumberScanRequired":details.serialNumberScanRequired,"StockItemId":itemStockId,
+                "currentBatchType":0,"Dim":0}
+            }
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
+        return  this.http.post(url,params,options);
+    }
+
+
+    getSuppliers(StockItemId){
+        let url = `${this.tokenService.getServer()}/api/Inventory/GetStockSupplierStat`;
+        let params = {
+            inventoryItemId:StockItemId
+            }
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
+        return  this.http.post(url,params,options);
+    }
+
+    getSupplierByIndex(i){
+        return this.suppliers[i];
+    }
+    setSuppliers(suppliers){
+        this.suppliers = suppliers;
+    }
+ 
+    editSupplierListener(){
+        return this.editSupplier.asObservable();
+    }
+    updateSupplierStat(data,supplierID,stockItemId){
+        let url = `${this.tokenService.getServer()}/api/Inventory/UpdateStockSupplierStat`;
+        let params = {
+            itemSuppliers:[
+                {
+                  "IsDefault": true,
+                  "Supplier": data.supplier,
+                  "SupplierID": supplierID,
+                  "Code": data.code,
+                  "SupplierBarcode": data.barCode,
+                  "LeadTime": data.leadTime,
+                  "PurchasePrice": data.purchasePrice,
+                  "MinPrice":data.minPrice,
+                  "MaxPrice":data.maxPrice,
+                  "AveragePrice": data.averagePrice,
+                  "AverageLeadTime": data.averageLeadTime,
+                  "SupplierMinOrderQty": data.supplierMinOrderQty,
+                  "SupplierPackSize": data.supplierPackSize,
+                  "SupplierCurrency": data.supplierCurrency,
+                  "StockItemId": stockItemId
+                }]
+            }
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
     }

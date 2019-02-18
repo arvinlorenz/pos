@@ -1,0 +1,98 @@
+<mat-card>
+    <form [formGroup]="form" (submit)="save()">
+        <mat-form-field>
+          <input 
+          matInput 
+          placeholder="Supplier"
+          formControlName="supplier">
+        </mat-form-field>
+        <mat-form-field>
+          <input 
+          matInput 
+          placeholder="Code"
+          formControlName="code">
+        </mat-form-field>
+        <mat-form-field>
+          <input 
+          matInput 
+          placeholder="Bar Code"
+          formControlName="barCode">
+        </mat-form-field>
+  
+        <mat-form-field>
+            <input 
+            matInput 
+            placeholder="Lead Time"
+            formControlName="leadTime">
+          </mat-form-field>
+      
+        <mat-form-field>
+          <input 
+          #quantity
+          matInput 
+          placeholder="Purchase Price"
+          formControlName="purchasePrice">
+        </mat-form-field>
+        
+        <mat-form-field>
+          <input 
+          matInput 
+          placeholder="minPrice"
+          formControlName="minPrice">
+        </mat-form-field>
+  
+        
+  
+        <mat-form-field>
+          <input 
+          matInput 
+          placeholder="Max Price"
+          formControlName="maxPrice">
+        </mat-form-field>
+  
+        <mat-form-field>
+          <input 
+          matInput 
+          placeholder="Average Price"
+          formControlName="averagePrice">
+        </mat-form-field>
+  
+        <mat-form-field>
+          <input 
+          matInput 
+          placeholder="Average Lead Time"
+          formControlName="averageLeadTime">
+        </mat-form-field>
+  
+        <mat-form-field>
+          <input 
+          matInput 
+          placeholder="Supplier Min Order Qty"
+          formControlName="supplierMinOrderQty">
+        </mat-form-field>
+        <mat-form-field>
+          <input 
+          matInput 
+          placeholder="Supplier Pack Size"
+          formControlName="supplierPackSize">
+        </mat-form-field>
+        <mat-form-field>
+          <input 
+          matInput 
+          placeholder="Supplier Currency"
+          formControlName="supplierCurrency">
+        </mat-form-field>
+      
+        <mat-card-actions *ngIf="editMode && showButton">
+            <button 
+              mat-stroked-button 
+              type="submit"  
+              color="primary">SAVE</button>
+            <button mat-stroked-button (click)="cancel()" color="warn">CANCEL</button>
+        </mat-card-actions>
+  
+        <mat-card-actions *ngIf="!editMode && showButton">
+            <button mat-stroked-button (click)="edit()"color="primary" >EDIT</button>
+        </mat-card-actions>
+    </form>
+  </mat-card>

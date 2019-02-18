@@ -7,6 +7,7 @@ import { SettingsComponent } from "./settings/settings.component";
 import { LoginComponent } from "./auth/login/login.component";
 import { HomeComponent } from "./home/home.component";
 import { AuthGuard } from "./auth/auth.guard";
+import { InventoryWithProvidersComponent } from "./inventory/inventory-with-providers/inventory-with-providers.component";
 
 
 const routes: Routes = [
@@ -17,6 +18,12 @@ const routes: Routes = [
     children: [
       { path: '', component: InventoryDetailComponent },
       { path: ':itemId', component: InventoryDetailComponent },
+    ], canActivate: [AuthGuard]
+  },
+  { path: 'providers', component: InventoryComponent,
+    children: [
+      { path: '', component: InventoryWithProvidersComponent },
+      { path: ':itemId', component: InventoryWithProvidersComponent },
     ], canActivate: [AuthGuard]
   },
   { path: 'login', component: LoginComponent},
