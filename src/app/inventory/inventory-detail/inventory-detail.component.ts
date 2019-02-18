@@ -16,6 +16,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
   skuDetails;
   skuDetailsSub: Subscription;
   itemStockId;
+  imagePath = null;
   editMode = false;
   showButton = false;
   itemId;
@@ -29,6 +30,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
 
   disableAllFields(){
     this.skuform.controls.itemNumber.disable();
+    this.skuform.controls.itemTitle.disable();
     this.skuform.controls.quantity.disable();
     this.skuform.controls.openOrder.disable();
     this.skuform.controls.available.disable();
@@ -42,11 +44,8 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
         this.soundsService.playError();
         this.skuform.reset();
         this.showButton = false;
-        this.skuform.controls.itemNumber.disable();
-        this.skuform.controls.quantity.disable();
-        this.skuform.controls.openOrder.disable();
-        this.skuform.controls.available.disable();
-        this.skuform.controls.due.disable();
+        this.imagePath = null;
+        this.disableAllFields();
         return;
       }
       else{
@@ -54,6 +53,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
         this.showButton = true;
         this.itemDetails = {
           itemNumber: resSku[0].ItemNumber,
+          itemTitle: resSku[0].ItemTitle,
           available: resSku[0].Available,
           quantity: resSku[0].Quantity,
           openOrder:resSku[0].InOrder,
@@ -61,12 +61,26 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
           bin: ''
         }
         this.itemStockId = resSku[0].StockItemId;
+        this.inventoryService.getItemImage(this.itemStockId)
+          .subscribe((img:any[])=>{
+            if(img.length > 0){
+              this.itemDetails.imagePath = img[0].FullSource;
+              this.imagePath = this.itemDetails.imagePath;
+              this.inventoryService.setSkuDetails({...this.itemDetails});
+            }
+            else{
+              this.itemDetails.imagePath = null;
+              this.imagePath = this.itemDetails.imagePath;
+              this.inventoryService.setSkuDetails({...this.itemDetails});
+            }
+          })
         this.inventoryService.getBinRackDetail(resSku[0].StockItemId)
           .subscribe((resBin: any[]) =>{
             if(resBin.length === 0){
               this.inventoryService.setSkuDetails(this.itemDetails);
               this.skuform = new FormGroup({
                 itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
+                itemTitle: new FormControl(this.skuDetails.itemTitle, Validators.required),
                 quantity: new FormControl(this.skuDetails.quantity, Validators.required),
                 openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
                 available: new FormControl(this.skuDetails.available, Validators.required),
@@ -80,6 +94,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
               this.inventoryService.setSkuDetails(this.itemDetails);
               this.skuform = new FormGroup({
                 itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
+                itemTitle: new FormControl(this.skuDetails.itemTitle, Validators.required),
                 quantity: new FormControl(this.skuDetails.quantity, Validators.required),
                 openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
                 available: new FormControl(this.skuDetails.available, Validators.required),
@@ -103,6 +118,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
 
     this.skuform = new FormGroup({
       itemNumber: new FormControl(null, Validators.required),
+      itemTitle: new FormControl(null, Validators.required),
       quantity: new FormControl(null, Validators.required),
       openOrder: new FormControl(null, Validators.required),
       available: new FormControl(null, Validators.required),

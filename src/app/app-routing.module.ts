@@ -7,7 +7,7 @@ import { SettingsComponent } from "./settings/settings.component";
 import { LoginComponent } from "./auth/login/login.component";
 import { HomeComponent } from "./home/home.component";
 import { AuthGuard } from "./auth/auth.guard";
-import { InventoryWithProvidersComponent } from "./inventory/inventory-with-providers/inventory-with-providers.component";
+import { InventoryWithSuppliersComponent } from "./inventory/inventory-with-suppliers/inventory-with-suppliers.component";
 
 
 const routes: Routes = [
@@ -20,10 +20,10 @@ const routes: Routes = [
       { path: ':itemId', component: InventoryDetailComponent },
     ], canActivate: [AuthGuard]
   },
-  { path: 'providers', component: InventoryComponent,
+  { path: 'suppliers', component: InventoryComponent,
     children: [
-      { path: '', component: InventoryWithProvidersComponent },
-      { path: ':itemId', component: InventoryWithProvidersComponent },
+      { path: '', component: InventoryWithSuppliersComponent },
+      { path: ':itemId', component: InventoryWithSuppliersComponent },
     ], canActivate: [AuthGuard]
   },
   { path: 'login', component: LoginComponent},

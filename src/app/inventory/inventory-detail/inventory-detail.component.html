@@ -1,4 +1,7 @@
 <mat-card>
+    <div class="item-image" *ngIf="imagePath">
+        <img [src]="imagePath" [alt]="itemDetails.itemTitle">
+    </div>
     <form [formGroup]="skuform" (submit)="save()">
       <mat-form-field>
         <input 
@@ -7,6 +10,13 @@
         formControlName="itemNumber">
       </mat-form-field>
     
+      <mat-form-field>
+          <input 
+          matInput 
+          placeholder="Item Name"
+          formControlName="itemTitle">
+        </mat-form-field>
+        
       <mat-form-field>
         <input 
         #quantity

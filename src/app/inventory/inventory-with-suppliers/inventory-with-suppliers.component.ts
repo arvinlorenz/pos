@@ -7,11 +7,11 @@ import { TokenService } from 'src/app/shared/token.service';
 import { SoundsService } from 'src/app/shared/sounds.service';
 
 @Component({
-  selector: 'app-inventory-with-providers',
-  templateUrl: './inventory-with-providers.component.html',
-  styleUrls: ['./inventory-with-providers.component.css']
+  selector: 'app-inventory-with-suppliers',
+  templateUrl: './inventory-with-suppliers.component.html',
+  styleUrls: ['./inventory-with-suppliers.component.css']
 })
-export class InventoryWithProvidersComponent implements OnInit, OnDestroy{
+export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
   itemDetails;
   skuDetails;
   itemStockId;

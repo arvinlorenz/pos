@@ -13,6 +13,7 @@ button{
 
 .item-image {
     width: 100%;
+    margin-bottom: 1rem;
 }
 
 .item-image img {
