@@ -113,17 +113,21 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
         this.itemStockId = resSku[0].StockItemId;
 
         this.inventoryService.setSkuDetails(this.itemDetails);
-        this.inventoryService.getItemDimentions()
+        this.inventoryService.getItemDetails()
           .subscribe((res:any)=>{
             let dimentionsData = res.Data.filter(data=>{
               return data.StockItemId === this.itemStockId;
-            })
+            });
+
+            console.log(dimentionsData)
             this.itemDetails = {
               ...this.itemDetails,
               height: dimentionsData[0].Height,
               width: dimentionsData[0].Width,
               depth:dimentionsData[0].Depth,
               weight: dimentionsData[0].Weight,
+              
+
             }
             this.inventoryService.setSkuDetails(this.itemDetails);
           })
@@ -142,28 +146,28 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
             
             
           })
-        this.form = new FormGroup({
-          itemTitle: new FormControl(this.skuDetails.itemTitle, Validators.required),
-          itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
-          quantity: new FormControl(this.skuDetails.quantity, Validators.required),
-          openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
-          available: new FormControl(this.skuDetails.available, Validators.required),
-          due: new FormControl(this.skuDetails.due, Validators.required),
-          minimumLevel: new FormControl(this.skuDetails.minimumLevel, Validators.required),
-          barcodeNumber: new FormControl(this.skuDetails.barcodeNumber, Validators.required),
-          purchasePrice: new FormControl(this.skuDetails.purchasePrice, Validators.required),
-          retailPrice: new FormControl(this.skuDetails.retailPrice, Validators.required),
-          taxRate: new FormControl(this.skuDetails.taxRate, Validators.required),
-          postalServiceId: new FormControl(this.skuDetails.postalServiceId, Validators.required),
-          categoryId: new FormControl(this.skuDetails.categoryId, Validators.required),
-          packageGroupId: new FormControl(this.skuDetails.packageGroupId, Validators.required),
-          height: new FormControl(this.skuDetails.height, Validators.required),
-          width: new FormControl(this.skuDetails.width, Validators.required),
-          depth: new FormControl(this.skuDetails.depth, Validators.required),
-          weight: new FormControl(this.skuDetails.weight, Validators.required),
-          batchNumberScanRequired: new FormControl(this.skuDetails.batchNumberScanRequired, Validators.required),
-          serialNumberScanRequired: new FormControl(this.skuDetails.serialNumberScanRequired, Validators.required)
-        });
+          this.form.setValue({
+            itemTitle: this.skuDetails.itemTitle,
+            itemNumber: this.skuDetails.itemNumber,
+            quantity: this.skuDetails.quantity,
+            openOrder: this.skuDetails.openOrder,
+            available: this.skuDetails.available,
+            due: this.skuDetails.due,
+            minimumLevel: this.skuDetails.minimumLevel,
+            barcodeNumber: this.skuDetails.barcodeNumber,
+            purchasePrice: this.skuDetails.purchasePrice,
+            retailPrice: this.skuDetails.retailPrice,
+            taxRate: this.skuDetails.taxRate,
+            postalServiceId: this.skuDetails.postalServiceId,
+            categoryId: this.skuDetails.categoryId,
+            packageGroupId: this.skuDetails.packageGroupId,
+            height: this.skuDetails.height,
+            width: this.skuDetails.width,
+            depth: this.skuDetails.depth,
+            weight: this.skuDetails.weight,
+            batchNumberScanRequired: this.skuDetails.batchNumberScanRequired,
+            serialNumberScanRequired: this.skuDetails.serialNumberScanRequired,
+          });
         this.inventoryService.getSuppliers(this.itemStockId)
           .subscribe(suppliers=>{
             this.suppliers = suppliers;
@@ -187,11 +191,11 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
           available: this.skuDetails.available,
           due: this.skuDetails.due,
           minimumLevel: this.skuDetails.minimumLevel,
-          barcodeNumber: this.skuDetails.itemNumber,
-          purchasePrice: this.skuDetails.quantity,
-          retailPrice: this.skuDetails.openOrder,
-          taxRate: this.skuDetails.available,
-          postalServiceId: this.skuDetails.due,
+          barcodeNumber: this.skuDetails.barcodeNumber,
+          purchasePrice: this.skuDetails.purchasePrice,
+          retailPrice: this.skuDetails.retailPrice,
+          taxRate: this.skuDetails.taxRate,
+          postalServiceId: this.skuDetails.postalServiceId,
           categoryId: this.skuDetails.categoryId,
           packageGroupId: this.skuDetails.packageGroupId,
           height: this.skuDetails.height,

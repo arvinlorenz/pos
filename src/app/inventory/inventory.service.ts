@@ -44,7 +44,7 @@ export class InventoryService{
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
     }
-    getItemDimentions(){
+    getItemDetails(){
         let url = `${this.tokenService.getServer()}/api/Stock/GetStockItems`;
         let params = {
                 locationId: "00000000-0000-0000-0000-000000000000",
@@ -99,11 +99,21 @@ export class InventoryService{
         let params = {
             inventoryItem: {
                 "VariationGroupName":"",
-                "Quantity":details.quantity,"InOrder":details.inOrder,"Due":details.due,"MinimumLevel":details.minimumLevel,"Available":details.available,
-                "CreationDate":null,"IsCompositeParent":false,
-                "ItemNumber":details.itemNumber,"ItemTitle":details.itemTitle,"BarcodeNumber":details.barcodeNumber,
-                "MetaData":"","isBatchedStockType":false,
-                "PurchasePrice":details.purchasePrice,"RetailPrice":details.retailPrice,"TaxRate":details.taxRate,
+                "Quantity":details.quantity,
+                "InOrder":details.inOrder,
+                "Due":details.due,
+                "MinimumLevel":details.minimumLevel,
+                "Available":details.available,
+                "CreationDate":null,
+                "IsCompositeParent":false,
+                "ItemNumber":details.itemNumber,
+                "ItemTitle":details.itemTitle,
+                "BarcodeNumber":details.barcodeNumber,
+                "MetaData":"",
+                "isBatchedStockType":false,
+                "PurchasePrice":details.purchasePrice,
+                "RetailPrice":details.retailPrice,
+                "TaxRate":details.taxRate,
                 "PostalServiceId":"00000000-0000-0000-0000-000000000000",
                 "PostalServiceName":null,"CategoryId":"00000000-0000-0000-0000-000000000000",
                 "CategoryName":null,"PackageGroupId":"00000000-0000-0000-0000-000000000000",
