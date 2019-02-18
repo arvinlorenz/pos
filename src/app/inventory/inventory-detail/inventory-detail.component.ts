@@ -19,7 +19,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
   editMode = false;
   showButton = false;
   itemId;
-  form: FormGroup;
+  skuform: FormGroup;
   @ViewChild("quantity") quantityField: ElementRef;
   constructor(
       public inventoryService: InventoryService, 
@@ -28,25 +28,25 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
       public route: ActivatedRoute) { }
 
   disableAllFields(){
-    this.form.controls.itemNumber.disable();
-    this.form.controls.quantity.disable();
-    this.form.controls.openOrder.disable();
-    this.form.controls.available.disable();
-    this.form.controls.due.disable();
-    this.form.controls.bin.disable();
+    this.skuform.controls.itemNumber.disable();
+    this.skuform.controls.quantity.disable();
+    this.skuform.controls.openOrder.disable();
+    this.skuform.controls.available.disable();
+    this.skuform.controls.due.disable();
+    this.skuform.controls.bin.disable();
   }
   skuSubscribe(){
     this.inventoryService.getSkuDetails(this.itemId).subscribe((resSku:any[])=>{
                 
       if(resSku.length === 0){
         this.soundsService.playError();
-        this.form.reset();
+        this.skuform.reset();
         this.showButton = false;
-        this.form.controls.itemNumber.disable();
-        this.form.controls.quantity.disable();
-        this.form.controls.openOrder.disable();
-        this.form.controls.available.disable();
-        this.form.controls.due.disable();
+        this.skuform.controls.itemNumber.disable();
+        this.skuform.controls.quantity.disable();
+        this.skuform.controls.openOrder.disable();
+        this.skuform.controls.available.disable();
+        this.skuform.controls.due.disable();
         return;
       }
       else{
@@ -65,7 +65,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
           .subscribe((resBin: any[]) =>{
             if(resBin.length === 0){
               this.inventoryService.setSkuDetails(this.itemDetails);
-              this.form = new FormGroup({
+              this.skuform = new FormGroup({
                 itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
                 quantity: new FormControl(this.skuDetails.quantity, Validators.required),
                 openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
@@ -78,7 +78,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
             else{
               this.itemDetails.bin = resBin[0].BinRack;
               this.inventoryService.setSkuDetails(this.itemDetails);
-              this.form = new FormGroup({
+              this.skuform = new FormGroup({
                 itemNumber: new FormControl(this.skuDetails.itemNumber, Validators.required),
                 quantity: new FormControl(this.skuDetails.quantity, Validators.required),
                 openOrder: new FormControl(this.skuDetails.openOrder, Validators.required),
@@ -101,7 +101,7 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
         this.skuDetails = skuRes;
       });
 
-    this.form = new FormGroup({
+    this.skuform = new FormGroup({
       itemNumber: new FormControl(null, Validators.required),
       quantity: new FormControl(null, Validators.required),
       openOrder: new FormControl(null, Validators.required),
@@ -136,8 +136,8 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
 
   edit(){
     this.editMode = true;
-    this.form.controls.quantity.enable();
-    this.form.controls.bin.enable();
+    this.skuform.controls.quantity.enable();
+    this.skuform.controls.bin.enable();
     this.quantityField.nativeElement.focus();
    
   }
@@ -148,16 +148,16 @@ export class InventoryDetailComponent implements OnInit, OnDestroy{
 
   save(){
     console.log('hi')
-    let newQuantity = this.form.value.quantity;
+    let newQuantity = this.skuform.value.quantity;
     let available;
     this.inventoryService.setQuantity(this.itemId,newQuantity)
       .subscribe(a =>{
         available = a[0].Available;
-        this.inventoryService.setBinRack(this.itemStockId, this.form.value.bin)
+        this.inventoryService.setBinRack(this.itemStockId, this.skuform.value.bin)
           .subscribe((a:any)=>{
             
             if(a===null){
-              this.inventoryService.setSkuDetails({...this.skuDetails, available ,quantity: newQuantity, bin:this.form.value.bin})
+              this.inventoryService.setSkuDetails({...this.skuDetails, available ,quantity: newQuantity, bin:this.skuform.value.bin})
               this.disableAllFields();
               this.editMode = false;
               this.soundsService.playSuccess();
