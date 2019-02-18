@@ -7,5 +7,6 @@ export const environment = {
     projectId: "arvin-8a261",
     storageBucket: "arvin-8a261.appspot.com",
     messagingSenderId: "374192142723"
-  }
+  },
+  apiDB : 'apiToken'
 };
