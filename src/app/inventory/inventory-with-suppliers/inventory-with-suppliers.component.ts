@@ -119,17 +119,18 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
               return data.StockItemId === this.itemStockId;
             });
 
-            console.log(dimentionsData)
-            this.itemDetails = {
-              ...this.itemDetails,
-              height: dimentionsData[0].Height,
-              width: dimentionsData[0].Width,
-              depth:dimentionsData[0].Depth,
-              weight: dimentionsData[0].Weight,
-              
-
+            if(dimentionsData.length > 0){
+              this.itemDetails = {
+                ...this.itemDetails,
+                height: dimentionsData[0].Height,
+                width: dimentionsData[0].Width,
+                depth:dimentionsData[0].Depth,
+                weight: dimentionsData[0].Weight,
+              }
+              this.inventoryService.setSkuDetails(this.itemDetails);
             }
-            this.inventoryService.setSkuDetails(this.itemDetails);
+            
+            
           })
         this.inventoryService.getItemImage(this.itemStockId)
           .subscribe((img:any[])=>{
@@ -167,6 +168,7 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
             weight: this.skuDetails.weight,
             batchNumberScanRequired: this.skuDetails.batchNumberScanRequired,
             serialNumberScanRequired: this.skuDetails.serialNumberScanRequired,
+            image: null,
           });
         this.inventoryService.getSuppliers(this.itemStockId)
           .subscribe(suppliers=>{
@@ -204,6 +206,7 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
           weight: this.skuDetails.weight,
           batchNumberScanRequired: this.skuDetails.batchNumberScanRequired,
           serialNumberScanRequired: this.skuDetails.serialNumberScanRequired,
+          image: null,
         });
       });
 
@@ -228,6 +231,8 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
       weight: new FormControl(null, Validators.required),
       batchNumberScanRequired: new FormControl(null, Validators.required),
       serialNumberScanRequired: new FormControl(null, Validators.required),
+      image: new FormControl(null, Validators.required),
+      
     });
     this.disableAllFields();
     
@@ -310,12 +315,26 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
     };
     this.inventoryService.updateInventoryItem(details,this.itemStockId).subscribe(a=>{
       if(a === null){
+        if(this.form.value.image){
+          this.inventoryService.upload(this.form.value.image, this.itemStockId);
+        }
+        
         this.skuSubscribe()
         this.soundsService.playSuccess();
         this.editMode = false;
       }
     })
   }
+
+  onImagePicked(event: Event){
+    console.log('onPick')
+    const file = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({image: file});
+    this.form.get('image').updateValueAndValidity();
+  }
+
+
+
   ngOnDestroy(){
     this.skuDetailsSub.unsubscribe();
     if(this.tokenSub){

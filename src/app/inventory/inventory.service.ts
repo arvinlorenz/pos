@@ -3,7 +3,8 @@ import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { TokenService } from "../shared/token.service";
-
+import * as firebase from 'firebase';
+import { AngularFireDatabase } from "angularfire2/database";
 @Injectable({providedIn:'root'})
 export class InventoryService{
 
@@ -14,7 +15,10 @@ export class InventoryService{
     suppliers;
     public editSupplier = new Subject<any>();
 
-    constructor(private http: HttpClient, private router: Router, private tokenService: TokenService){}
+    uploadTask: firebase.storage.UploadTask;
+    basePath:string = '/images';
+
+    constructor(private http: HttpClient, private router: Router, private tokenService: TokenService, private db: AngularFireDatabase){}
     
     setSkuDetails(skuDetails){
         this.skuResponse = skuDetails;
@@ -124,9 +128,52 @@ export class InventoryService{
             }
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
+
+
+        
     }
 
+   private uploadImageToLinn(downloadURL,stockItemId){
+        let url = `${this.tokenService.getServer()}/api/Inventory/AddImageToInventoryItem`;
+        let params = {
+            request:{"ItemNumber": stockItemId,
+                    "StockItemId": stockItemId,
+                    "IsMain": true,
+                    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/arvin-8a261.appspot.com/o/images%2FIMG_E2437.JPG?alt=media&token=962ebec3-dd1c-465b-b3dd-eec054f139d5"
+                }
+            }
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
+        return this.http.post(url,params,options)
+    }
 
+    upload(image,stockItemId){
+        console.log(image)
+        let storageRef = firebase.storage().ref();
+        this.uploadTask = storageRef.child(`${this.basePath}/${image.name}`).put(image);
+        this.uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+            (snapshot:any)=>{
+                image.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        
+        },
+        (error)=>{
+            console.log(error)
+        },
+        async()=>{
+            this.saveFileData(image)
+            //let downloadUrl = await this.uploadTask.snapshot.ref.getDownloadURL();
+            console.log(this.uploadTask.snapshot)
+            
+            
+            
+            
+            
+        })
+    }
+    private saveFileData(image) {
+        this.db.list(`${this.basePath}/`).push(image);
+      }
+
+    
     getSuppliers(StockItemId){
         let url = `${this.tokenService.getServer()}/api/Inventory/GetStockSupplierStat`;
         let params = {
@@ -171,4 +218,6 @@ export class InventoryService{
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
     }
+
+    
 }

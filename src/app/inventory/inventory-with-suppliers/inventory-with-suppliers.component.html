@@ -5,7 +5,10 @@
               <img [src]="imagePath" [alt]="itemDetails.itemTitle">
           </div>
           <form [formGroup]="form" (submit)="save()">
-            
+              <div *ngIf="editMode && showButton">
+                  <button type="button" mat-stroked-button (click)="filePicker.click()">Pick Image</button>
+                  <input type="file" #filePicker (change)="onImagePicked($event)">
+                </div>
             <mat-form-field>
               <input 
               matInput 
