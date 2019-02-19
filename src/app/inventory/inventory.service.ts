@@ -140,13 +140,13 @@ export class InventoryService{
         
     }
 
-   private uploadImageToLinn(downloadURL,stockItemId){
+   uploadImageToLinn(imageUrl,stockItemId){
         let url = `${this.tokenService.getServer()}/api/Inventory/AddImageToInventoryItem`;
         let params = {
             request:{"ItemNumber": stockItemId,
                     "StockItemId": stockItemId,
                     "IsMain": true,
-                    "ImageUrl": "https://firebasestorage.googleapis.com/v0/b/arvin-8a261.appspot.com/o/images%2FIMG_E2437.JPG?alt=media&token=962ebec3-dd1c-465b-b3dd-eec054f139d5"
+                    "ImageUrl": imageUrl
                 }
             }
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };

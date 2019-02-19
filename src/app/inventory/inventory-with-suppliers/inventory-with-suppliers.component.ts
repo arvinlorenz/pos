@@ -32,6 +32,7 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
       public route: ActivatedRoute) { }
 
   disableAllFields(){
+    this.form.controls.imageUrl.disable()
     this.form.controls.itemTitle.disable();
     this.form.controls.itemNumber.disable();
     this.form.controls.quantity.disable();
@@ -56,6 +57,7 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
     this.form.controls.shipping.disable()
   }
   enableAllFields(){
+    this.form.controls.imageUrl.enable()
     this.form.controls.itemTitle.enable();
     this.form.controls.itemNumber.enable();
     this.form.controls.quantity.enable();
@@ -94,6 +96,7 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
       else{
         this.showButton = true;
         let initialSkuDetails = {
+          imageUrl: '',
           itemTitle: resSku[0].ItemTitle,
           itemNumber: resSku[0].ItemNumber,
           available: resSku[0].Available,
@@ -108,12 +111,13 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
           postalServiceId: resSku[0].PostalServiceId,
           categoryId: resSku[0].CategoryId,
           packageGroupId: resSku[0].PackageGroupId,
-          height: '-',
-          width: '-',
-          depth:'-',
-          weight: '-',
-          shipping: '-',
-          postage: '-',
+          height: '',
+          width: '',
+          depth:'',
+          weight: '',
+          shipping: '',
+          postage: '',
+          imagePath: '',
           batchNumberScanRequired:resSku[0].BatchNumberScanRequired,
           serialNumberScanRequired: resSku[0].SerialNumberScanRequired      
         }
@@ -171,6 +175,7 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
               }
           })
           this.form.setValue({
+            imageUrl: this.skuDetails.imageUrl,
             itemTitle: this.skuDetails.itemTitle,
             itemNumber: this.skuDetails.itemNumber,
             quantity: this.skuDetails.quantity,
@@ -211,6 +216,7 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
       .subscribe((skuRes)=>{
         this.skuDetails = skuRes;
         this.form.setValue({
+          imageUrl: '',
           itemTitle: this.skuDetails.itemTitle,
           itemNumber: this.skuDetails.itemNumber,
           quantity: this.skuDetails.quantity,
@@ -238,6 +244,7 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
       });
 
     this.form = new FormGroup({
+      imageUrl: new FormControl(null, Validators.required),
       itemTitle: new FormControl(null, Validators.required),
       itemNumber: new FormControl(null, Validators.required),
       quantity: new FormControl(null, Validators.required),
@@ -299,6 +306,7 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
   }
 
   save(){
+    let imageUrl = this.form.value.imageUrl.trim();
     let itemTitle = this.form.value.itemTitle;
     let itemNumber = this.form.value.itemNumber;
     let quantity = this.form.value.quantity;
@@ -347,28 +355,34 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
     };
     this.inventoryService.updateInventoryItem(details,this.itemStockId).subscribe(a=>{
       if(a === null){
-        if(this.form.value.image){
-          this.inventoryService.upload(this.form.value.image, this.itemStockId);
-        }
+        // if(this.form.value.image){
+        //   this.inventoryService.upload(this.form.value.image, this.itemStockId);
+        // }
 
         this.inventoryService.updateInventoryItemExtendedProperties([shipping,postage])
           .subscribe(a=>{
-            console.log(a)
+            this.soundsService.playSuccess();
+            this.skuSubscribe()
+          })
+        this.inventoryService.uploadImageToLinn(imageUrl,this.itemStockId)
+          .subscribe(imageUpload=>{
+            console.log(imageUpload);
+            this.skuSubscribe();
           })
         
-        this.skuSubscribe()
-        this.soundsService.playSuccess();
+        
+        
         this.editMode = false;
       }
     })
   }
 
-  onImagePicked(event: Event){
-    console.log('onPick')
-    const file = (event.target as HTMLInputElement).files[0];
-    this.form.patchValue({image: file});
-    this.form.get('image').updateValueAndValidity();
-  }
+  // onImagePicked(event: Event){
+  //   console.log('onPick')
+  //   const file = (event.target as HTMLInputElement).files[0];
+  //   this.form.patchValue({image: file});
+  //   this.form.get('image').updateValueAndValidity();
+  // }
 
 
 
