@@ -12,7 +12,8 @@ import { SoundsService } from 'src/app/shared/sounds.service';
   styleUrls: ['./inventory-with-suppliers.component.css']
 })
 export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
-  itemDetails;
+  shippingExtendedProp;
+  postageExtendedProp
   skuDetails;
   itemStockId;
   skuDetailsSub: Subscription;
@@ -50,7 +51,9 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
     this.form.controls.depth.disable();
     this.form.controls.weight.disable();
     this.form.controls.batchNumberScanRequired.disable();
-    this.form.controls.serialNumberScanRequired.disable()
+    this.form.controls.serialNumberScanRequired.disable();
+    this.form.controls.postage.disable();
+    this.form.controls.shipping.disable()
   }
   enableAllFields(){
     this.form.controls.itemTitle.enable();
@@ -72,7 +75,9 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
     this.form.controls.depth.enable();
     this.form.controls.weight.enable();
     this.form.controls.batchNumberScanRequired.enable();
-    this.form.controls.serialNumberScanRequired.enable()
+    this.form.controls.serialNumberScanRequired.enable();
+    this.form.controls.postage.enable();
+    this.form.controls.shipping.enable()
   }
   skuSubscribe(){
     this.inventoryService.getSkuDetails(this.itemId).subscribe((resSku:any[])=>{
@@ -88,7 +93,7 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
       }
       else{
         this.showButton = true;
-        this.itemDetails = {
+        let initialSkuDetails = {
           itemTitle: resSku[0].ItemTitle,
           itemNumber: resSku[0].ItemNumber,
           available: resSku[0].Available,
@@ -107,12 +112,14 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
           width: '-',
           depth:'-',
           weight: '-',
+          shipping: '-',
+          postage: '-',
           batchNumberScanRequired:resSku[0].BatchNumberScanRequired,
           serialNumberScanRequired: resSku[0].SerialNumberScanRequired      
         }
         this.itemStockId = resSku[0].StockItemId;
 
-        this.inventoryService.setSkuDetails(this.itemDetails);
+        this.inventoryService.setSkuDetails({...this.skuDetails, ...initialSkuDetails});
         this.inventoryService.getItemDetails()
           .subscribe((res:any)=>{
             let dimentionsData = res.Data.filter(data=>{
@@ -120,14 +127,13 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
             });
 
             if(dimentionsData.length > 0){
-              this.itemDetails = {
-                ...this.itemDetails,
+              this.inventoryService.setSkuDetails({
+                ...this.skuDetails,
                 height: dimentionsData[0].Height,
                 width: dimentionsData[0].Width,
                 depth:dimentionsData[0].Depth,
                 weight: dimentionsData[0].Weight,
-              }
-              this.inventoryService.setSkuDetails(this.itemDetails);
+              });
             }
             
             
@@ -137,15 +143,32 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
             if(img.length > 0){
              
               this.imagePath = img[0].FullSource;
-              this.inventoryService.setSkuDetails({...this.itemDetails, imagePath: this.imagePath});
+              this.inventoryService.setSkuDetails({...this.skuDetails, imagePath: this.imagePath});
             }
             else{
-              this.itemDetails.imagePath = null;
-              this.imagePath = this.itemDetails.imagePath;
-              this.inventoryService.setSkuDetails({...this.itemDetails, imagePath: this.imagePath});
+              this.imagePath = null;
+              this.inventoryService.setSkuDetails({...this.skuDetails, imagePath: this.imagePath});
             }
-            
-            
+          })
+
+          this.inventoryService.getInventoryItemExtendedProperties(this.itemStockId)
+            .subscribe((propRes:any[])=>{
+              console.log(propRes)
+              if(propRes.length > 0){
+               
+                propRes.forEach(prop=>{
+                  if(prop.ProperyName === "Postage"){
+                    this.postageExtendedProp = prop;
+                  }
+                  else if(prop.ProperyName === "Shipping"){
+                    this.shippingExtendedProp = prop;
+                  }
+                })
+                this.inventoryService.setSkuDetails({...this.skuDetails, postage:this.postageExtendedProp.PropertyValue, shipping:this.shippingExtendedProp.PropertyValue});
+              }
+              else{
+                this.inventoryService.setSkuDetails({...this.skuDetails, postage:null, shipping:null});
+              }
           })
           this.form.setValue({
             itemTitle: this.skuDetails.itemTitle,
@@ -166,6 +189,8 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
             width: this.skuDetails.width,
             depth: this.skuDetails.depth,
             weight: this.skuDetails.weight,
+            postage: this.skuDetails.postage,
+            shipping: this.skuDetails.shipping,
             batchNumberScanRequired: this.skuDetails.batchNumberScanRequired,
             serialNumberScanRequired: this.skuDetails.serialNumberScanRequired,
             image: null,
@@ -204,9 +229,11 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
           width: this.skuDetails.width,
           depth: this.skuDetails.depth,
           weight: this.skuDetails.weight,
+          postage: this.skuDetails.postage,
+          shipping: this.skuDetails.shipping,
           batchNumberScanRequired: this.skuDetails.batchNumberScanRequired,
           serialNumberScanRequired: this.skuDetails.serialNumberScanRequired,
-          image: null,
+          image: null
         });
       });
 
@@ -232,6 +259,8 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
       batchNumberScanRequired: new FormControl(null, Validators.required),
       serialNumberScanRequired: new FormControl(null, Validators.required),
       image: new FormControl(null, Validators.required),
+      postage: new FormControl(null, Validators.required),
+      shipping: new FormControl(null, Validators.required),
       
     });
     this.disableAllFields();
@@ -291,6 +320,9 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
     let batchNumberScanRequired = this.form.value.batchNumberScanRequired;
     let serialNumberScanRequired = this.form.value.serialNumberScanRequired;
 
+    let postage = {...this.postageExtendedProp, PropertyValue: this.form.value.postage}
+    let shipping = {...this.shippingExtendedProp, PropertyValue: this.form.value.shipping}
+    
     let details = {
       itemTitle,
       itemNumber,
@@ -318,6 +350,11 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
         if(this.form.value.image){
           this.inventoryService.upload(this.form.value.image, this.itemStockId);
         }
+
+        this.inventoryService.updateInventoryItemExtendedProperties([shipping,postage])
+          .subscribe(a=>{
+            console.log(a)
+          })
         
         this.skuSubscribe()
         this.soundsService.playSuccess();

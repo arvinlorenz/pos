@@ -96,7 +96,14 @@ export class InventoryService{
         return  this.http.post(url,params,options);
     }
 
-
+    updateInventoryItemExtendedProperties(details){
+        let url = `${this.tokenService.getServer()}/api/Inventory/UpdateInventoryItemExtendedProperties`;
+        let params = {
+            inventoryItemExtendedProperties:details
+            };
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
+        return  this.http.post(url,params,options);
+    }
 
     updateInventoryItem(details, itemStockId){
         let url = `${this.tokenService.getServer()}/api/Inventory/UpdateInventoryItem`;
@@ -185,6 +192,15 @@ export class InventoryService{
 
     getSupplierByIndex(i){
         return this.suppliers[i];
+    }
+
+    getInventoryItemExtendedProperties(StockItemId){
+        let url = `${this.tokenService.getServer()}/api/Inventory/GetInventoryItemExtendedProperties`;
+        let params = {
+            inventoryItemId:StockItemId
+            }
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
+        return  this.http.post(url,params,options);
     }
     setSuppliers(suppliers){
         this.suppliers = suppliers;

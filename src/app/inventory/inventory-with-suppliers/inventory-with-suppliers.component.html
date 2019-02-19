@@ -2,7 +2,7 @@
   <mat-tab label="Details"> 
       <mat-card>
           <div class="item-image" *ngIf="imagePath">
-              <img [src]="imagePath" [alt]="itemDetails.itemTitle">
+              <img [src]="imagePath">
           </div>
           <form [formGroup]="form" (submit)="save()">
               <div *ngIf="editMode && showButton">
@@ -146,14 +146,21 @@
               placeholder="Serial Number Scan Required"
               formControlName="serialNumberScanRequired">
             </mat-form-field>
-      
-            <!-- <mat-form-field>
+            
+            <mat-form-field>
               <input 
               matInput 
-              placeholder="BinRack"
-              formControlName="bin">
-            </mat-form-field> -->
-          
+              placeholder="Postage"
+              formControlName="postage">
+            </mat-form-field>
+
+              <mat-form-field>
+                <input 
+                matInput 
+                placeholder="Shipping"
+                formControlName="shipping">
+              </mat-form-field>
+ 
             <mat-card-actions *ngIf="editMode && showButton">
                 <button 
                   mat-stroked-button 
