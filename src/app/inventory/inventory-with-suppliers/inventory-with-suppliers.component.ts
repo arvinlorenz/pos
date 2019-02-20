@@ -43,7 +43,6 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
     this.form.controls.barcodeNumber.disable();
     this.form.controls.purchasePrice.disable();
     this.form.controls.retailPrice.disable();
-    this.form.controls.taxRate.disable();
     this.form.controls.postalServiceId.disable();
     this.form.controls.categoryId.disable()
     this.form.controls.packageGroupId.disable();
@@ -51,8 +50,6 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
     this.form.controls.width.disable();
     this.form.controls.depth.disable();
     this.form.controls.weight.disable();
-    this.form.controls.batchNumberScanRequired.disable();
-    this.form.controls.serialNumberScanRequired.disable();
     this.form.controls.postage.disable();
     this.form.controls.shipping.disable()
   }
@@ -68,7 +65,6 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
     this.form.controls.barcodeNumber.enable();
     this.form.controls.purchasePrice.enable();
     this.form.controls.retailPrice.enable();
-    this.form.controls.taxRate.enable();
     this.form.controls.postalServiceId.enable();
     this.form.controls.categoryId.enable()
     this.form.controls.packageGroupId.enable();
@@ -76,8 +72,6 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
     this.form.controls.width.enable();
     this.form.controls.depth.enable();
     this.form.controls.weight.enable();
-    this.form.controls.batchNumberScanRequired.enable();
-    this.form.controls.serialNumberScanRequired.enable();
     this.form.controls.postage.enable();
     this.form.controls.shipping.enable()
   }
@@ -107,10 +101,9 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
           barcodeNumber: resSku[0].BarcodeNumber,
           purchasePrice: resSku[0].PurchasePrice,
           retailPrice: resSku[0].RetailPrice,
-          taxRate:resSku[0].TaxRate,
-          postalServiceId: resSku[0].PostalServiceId,
-          categoryId: resSku[0].CategoryId,
-          packageGroupId: resSku[0].PackageGroupId,
+          postalServiceId: '',
+          categoryId: '',
+          packageGroupId: '',
           height: '',
           width: '',
           depth:'',
@@ -118,27 +111,23 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
           shipping: '',
           postage: '',
           imagePath: '',
-          batchNumberScanRequired:resSku[0].BatchNumberScanRequired,
-          serialNumberScanRequired: resSku[0].SerialNumberScanRequired      
         }
         this.itemStockId = resSku[0].StockItemId;
 
         this.inventoryService.setSkuDetails({...this.skuDetails, ...initialSkuDetails});
-        this.inventoryService.getItemDetails()
-          .subscribe((res:any)=>{
-            let dimentionsData = res.Data.filter(data=>{
-              return data.StockItemId === this.itemStockId;
+        this.inventoryService.getItemDetails(this.itemStockId)
+          .subscribe((itemDetails:any)=>{
+            console.log(itemDetails)
+            this.inventoryService.setSkuDetails({
+              ...this.skuDetails,
+              height: itemDetails.Height,
+              width: itemDetails.Width,
+              depth:itemDetails.Depth,
+              weight: itemDetails.Weight,
+              postalServiceId: itemDetails.PostalServiceId,
+              categoryId: itemDetails.CategoryId,
+              packageGroupId: itemDetails.PackageGroupId,
             });
-
-            if(dimentionsData.length > 0){
-              this.inventoryService.setSkuDetails({
-                ...this.skuDetails,
-                height: dimentionsData[0].Height,
-                width: dimentionsData[0].Width,
-                depth:dimentionsData[0].Depth,
-                weight: dimentionsData[0].Weight,
-              });
-            }
             
             
           })
@@ -186,7 +175,6 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
             barcodeNumber: this.skuDetails.barcodeNumber,
             purchasePrice: this.skuDetails.purchasePrice,
             retailPrice: this.skuDetails.retailPrice,
-            taxRate: this.skuDetails.taxRate,
             postalServiceId: this.skuDetails.postalServiceId,
             categoryId: this.skuDetails.categoryId,
             packageGroupId: this.skuDetails.packageGroupId,
@@ -196,8 +184,6 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
             weight: this.skuDetails.weight,
             postage: this.skuDetails.postage,
             shipping: this.skuDetails.shipping,
-            batchNumberScanRequired: this.skuDetails.batchNumberScanRequired,
-            serialNumberScanRequired: this.skuDetails.serialNumberScanRequired,
             image: null,
           });
         this.inventoryService.getSuppliers(this.itemStockId)
@@ -227,7 +213,6 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
           barcodeNumber: this.skuDetails.barcodeNumber,
           purchasePrice: this.skuDetails.purchasePrice,
           retailPrice: this.skuDetails.retailPrice,
-          taxRate: this.skuDetails.taxRate,
           postalServiceId: this.skuDetails.postalServiceId,
           categoryId: this.skuDetails.categoryId,
           packageGroupId: this.skuDetails.packageGroupId,
@@ -237,8 +222,6 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
           weight: this.skuDetails.weight,
           postage: this.skuDetails.postage,
           shipping: this.skuDetails.shipping,
-          batchNumberScanRequired: this.skuDetails.batchNumberScanRequired,
-          serialNumberScanRequired: this.skuDetails.serialNumberScanRequired,
           image: null
         });
       });
@@ -255,7 +238,6 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
       barcodeNumber: new FormControl(null, Validators.required),
       purchasePrice: new FormControl(null, Validators.required),
       retailPrice: new FormControl(null, Validators.required),
-      taxRate: new FormControl(null, Validators.required),
       postalServiceId: new FormControl(null, Validators.required),
       categoryId: new FormControl(null, Validators.required),
       packageGroupId: new FormControl(null, Validators.required),
@@ -263,8 +245,6 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
       width: new FormControl(null, Validators.required),
       depth: new FormControl(null, Validators.required),
       weight: new FormControl(null, Validators.required),
-      batchNumberScanRequired: new FormControl(null, Validators.required),
-      serialNumberScanRequired: new FormControl(null, Validators.required),
       image: new FormControl(null, Validators.required),
       postage: new FormControl(null, Validators.required),
       shipping: new FormControl(null, Validators.required),
@@ -317,7 +297,6 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
     let barcodeNumber = this.form.value.barcodeNumber;
     let purchasePrice = this.form.value.purchasePrice;
     let retailPrice = this.form.value.retailPrice;
-    let taxRate = this.form.value.taxRate;
     let postalServiceId = this.form.value.postalServiceId;
     let categoryId = this.form.value.categoryId
     let packageGroupId = this.form.value.packageGroupId;
@@ -325,8 +304,6 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
     let width = this.form.value.width;
     let depth = this.form.value.depth;
     let weight = this.form.value.weight;
-    let batchNumberScanRequired = this.form.value.batchNumberScanRequired;
-    let serialNumberScanRequired = this.form.value.serialNumberScanRequired;
 
     let postage = {...this.postageExtendedProp, PropertyValue: this.form.value.postage}
     let shipping = {...this.shippingExtendedProp, PropertyValue: this.form.value.shipping}
@@ -342,16 +319,13 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
       barcodeNumber,
       purchasePrice,
       retailPrice,
-      taxRate,
       postalServiceId,
       categoryId,
       packageGroupId,
       height,
       width,
       depth,
-      weight,
-      batchNumberScanRequired,
-      serialNumberScanRequired
+      weight
     };
     this.inventoryService.updateInventoryItem(details,this.itemStockId).subscribe(a=>{
       if(a === null){

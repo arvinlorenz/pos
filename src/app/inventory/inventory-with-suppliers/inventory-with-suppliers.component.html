@@ -85,32 +85,8 @@
               placeholder="Retail Price"
               formControlName="retailPrice">
             </mat-form-field>
-            <mat-form-field>
-              <input 
-              matInput 
-              placeholder="Tax Rate"
-              formControlName="taxRate">
-            </mat-form-field>
-            <mat-form-field>
-              <input 
-              matInput 
-              placeholder="Postal Service ID"
-              formControlName="postalServiceId">
-            </mat-form-field>
             
-            <mat-form-field>
-              <input 
-              matInput 
-              placeholder="Category ID"
-              formControlName="categoryId">
-            </mat-form-field>
-      
-            <mat-form-field>
-              <input 
-              matInput 
-              placeholder="Package Group ID"
-              formControlName="packageGroupId">
-            </mat-form-field>
+            
       
             <mat-form-field>
               <input 
@@ -139,27 +115,6 @@
               placeholder="Weight"
               formControlName="weight">
             </mat-form-field>
-      
-            <mat-form-field>
-              <input 
-              matInput 
-              placeholder="Batch Number Scan Required"
-              formControlName="batchNumberScanRequired">
-            </mat-form-field>
-      
-            <mat-form-field>
-              <input 
-              matInput 
-              placeholder="Serial Number Scan Required"
-              formControlName="serialNumberScanRequired">
-            </mat-form-field>
-            
-            <mat-form-field>
-              <input 
-              matInput 
-              placeholder="Postage"
-              formControlName="postage">
-            </mat-form-field>
 
               <mat-form-field>
                 <input 
@@ -167,7 +122,46 @@
                 placeholder="Shipping"
                 formControlName="shipping">
               </mat-form-field>
- 
+              <mat-form-field>
+                <input 
+                matInput 
+                placeholder="Postage"
+                formControlName="postage">
+              </mat-form-field>
+              <mat-accordion>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Postage definition
+                    </mat-panel-title>
+                    <!-- <mat-panel-description>
+                      Type your name and age
+                    </mat-panel-description> -->
+                  </mat-expansion-panel-header>
+              
+                  <mat-form-field>
+                    <input 
+                    matInput 
+                    placeholder="Postal Service ID"
+                    formControlName="postalServiceId">
+                  </mat-form-field>
+                  
+                  <mat-form-field>
+                    <input 
+                    matInput 
+                    placeholder="Category ID"
+                    formControlName="categoryId">
+                  </mat-form-field>
+            
+                  <mat-form-field>
+                    <input 
+                    matInput 
+                    placeholder="Package Group ID"
+                    formControlName="packageGroupId">
+                  </mat-form-field>
+                </mat-expansion-panel>
+                
+              </mat-accordion>
             <mat-card-actions *ngIf="editMode && showButton">
                 <button 
                   mat-stroked-button 

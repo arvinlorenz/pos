@@ -48,16 +48,10 @@ export class InventoryService{
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
     }
-    getItemDetails(){
-        let url = `${this.tokenService.getServer()}/api/Stock/GetStockItems`;
+    getItemDetails(StockItemId){
+        let url = `${this.tokenService.getServer()}/api/Inventory/getInventoryItemById`;
         let params = {
-                locationId: "00000000-0000-0000-0000-000000000000",
-                entriesPerPage: 1000,
-                pageNumber: 1,
-                excludeComposites: true ,
-                excludeVariations: true,
-                excludeBatches: true
-
+                id: StockItemId,
             }
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
@@ -124,13 +118,11 @@ export class InventoryService{
                 "isBatchedStockType":false,
                 "PurchasePrice":details.purchasePrice,
                 "RetailPrice":details.retailPrice,
-                "TaxRate":details.taxRate,
                 "PostalServiceId":"00000000-0000-0000-0000-000000000000",
                 "PostalServiceName":null,"CategoryId":"00000000-0000-0000-0000-000000000000",
                 "CategoryName":null,"PackageGroupId":"00000000-0000-0000-0000-000000000000",
                 "PackageGroupName":null,"Height":details.height,"Width":details.width,"Depth":details.depth,"Weight":details.weight,
-                "InventoryTrackingType":0,"BatchNumberScanRequired":details.batchNumberScanRequired,
-                "SerialNumberScanRequired":details.serialNumberScanRequired,"StockItemId":itemStockId,
+                "InventoryTrackingType":0,"StockItemId":itemStockId,
                 "currentBatchType":0,"Dim":0}
             }
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
