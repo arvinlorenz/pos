@@ -6,14 +6,14 @@
       <mat-form-field>
         <input 
         matInput 
-        placeholder="Item Number"
+        placeholder="Item Number 項目編號"
         formControlName="itemNumber">
       </mat-form-field>
     
       <mat-form-field>
           <input 
           matInput 
-          placeholder="Item Name"
+          placeholder="Item Name 項目名稱"
           formControlName="itemTitle">
         </mat-form-field>
         
@@ -21,33 +21,34 @@
         <input 
         #quantity
         matInput 
-        placeholder="Quantity"
+        placeholder="Quantity 量"
         formControlName="quantity">
       </mat-form-field>
       
       <mat-form-field>
         <input 
         matInput 
-        placeholder="Open Order"
+        placeholder="Open Order 開放訂單"
         formControlName="openOrder">
       </mat-form-field>
 
       <mat-form-field>
         <input 
         matInput 
-        placeholder="Available"
+        placeholder="Available 可得到"
         formControlName="available">
       </mat-form-field>
       <mat-form-field>
         <input 
         matInput 
-        placeholder="Due"
+        placeholder="Due 應有
+        "
         formControlName="due">
       </mat-form-field>
       <mat-form-field>
         <input 
         matInput 
-        placeholder="BinRack"
+        placeholder="Bin Rack"
         formControlName="bin">
       </mat-form-field>
     
@@ -55,12 +56,13 @@
         <button 
           mat-stroked-button 
           type="submit"  
-          color="primary">SAVE</button>
-        <button mat-stroked-button (click)="cancel()" color="warnd">CANCEL</button>
+          color="primary">SAVE 保存</button>
+        <button mat-stroked-button (click)="cancel()" color="warnd">CANCEL 撤消
+        </button>
     </mat-card-actions>
   </form>
     <mat-card-actions *ngIf="!editMode && showButton">
-        <button mat-stroked-button (click)="edit()"color="primary" >EDIT</button>
+        <button mat-stroked-button (click)="edit()"color="primary" >EDIT 編輯</button>
     </mat-card-actions>
 
 </mat-card>

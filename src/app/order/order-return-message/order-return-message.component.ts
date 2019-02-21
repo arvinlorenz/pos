@@ -43,7 +43,7 @@ export class OrderReturnMessageComponent implements OnInit, OnDestroy {
         else{
           console.log(res)
           this.returnResponse = res;
-          this.orderStatus = 'Order already processed';
+          this.orderStatus = 'Order already processed 訂單已處理完畢';
           this.orderNumber = this.returnResponse.orderId ;
           this.orderCustomerName =  this.returnResponse.message.ProcessedOrders.Data[0].cFullName;
           

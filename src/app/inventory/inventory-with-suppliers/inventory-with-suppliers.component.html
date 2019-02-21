@@ -12,14 +12,14 @@
                 <mat-form-field>
                     <input 
                     matInput 
-                    placeholder="Image URL"
+                    placeholder="Image URL 圖片網址"
                     formControlName="imageUrl">
                   </mat-form-field>
                   
             <mat-form-field>
               <input 
               matInput 
-              placeholder="Item Number"
+              placeholder="Item Number 項目編號"
               formControlName="itemNumber">
             </mat-form-field>
       
@@ -34,55 +34,55 @@
               <input 
               #quantity
               matInput 
-              placeholder="Quantity"
+              placeholder="Quantity 項目名稱"
               formControlName="quantity">
             </mat-form-field>
             
             <mat-form-field>
               <input 
               matInput 
-              placeholder="Open Order"
+              placeholder="Open Order 開放訂單"
               formControlName="openOrder">
             </mat-form-field>
       
             <mat-form-field>
               <input 
               matInput 
-              placeholder="Minimum Level"
+              placeholder="Minimum Level 最低水平"
               formControlName="minimumLevel">
             </mat-form-field>
       
             <mat-form-field>
               <input 
               matInput 
-              placeholder="Available"
+              placeholder="Available 可得到"
               formControlName="available">
             </mat-form-field>
       
             <mat-form-field>
               <input 
               matInput 
-              placeholder="Due"
+              placeholder="Due 應有"
               formControlName="due">
             </mat-form-field>
       
             <mat-form-field>
               <input 
               matInput 
-              placeholder="Barcode"
+              placeholder="Barcode 條碼"
               formControlName="barcodeNumber">
             </mat-form-field>
       
             <mat-form-field>
               <input 
               matInput 
-              placeholder="Purchase Price"
+              placeholder="Purchase Price 購買價格"
               formControlName="purchasePrice">
             </mat-form-field>
             <mat-form-field>
               <input 
               matInput 
-              placeholder="Retail Price"
+              placeholder="Retail Price 零售價"
               formControlName="retailPrice">
             </mat-form-field>
             
@@ -91,76 +91,45 @@
             <mat-form-field>
               <input 
               matInput 
-              placeholder="Height"
+              placeholder="Height 高度"
               formControlName="height">
             </mat-form-field>
       
             <mat-form-field>
               <input 
               matInput 
-              placeholder="Width"
+              placeholder="Width 寬度" 
               formControlName="width">
             </mat-form-field>
       
             <mat-form-field>
               <input 
               matInput 
-              placeholder="Depth"
+              placeholder="Depth 深度
+              "
               formControlName="depth">
             </mat-form-field>
       
             <mat-form-field>
               <input 
               matInput 
-              placeholder="Weight"
+              placeholder="Weight 重量"
               formControlName="weight">
             </mat-form-field>
 
               <mat-form-field>
                 <input 
                 matInput 
-                placeholder="Shipping"
+                placeholder="Shipping 運輸"
                 formControlName="shipping">
               </mat-form-field>
               <mat-form-field>
                 <input 
                 matInput 
-                placeholder="Postage"
+                placeholder="Postage 郵資"
                 formControlName="postage">
               </mat-form-field>
-              <!-- <mat-accordion>
-                <mat-expansion-panel>
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      Postage definition
-                    </mat-panel-title>
-                  
-                  </mat-expansion-panel-header>
-              
-                  <mat-form-field>
-                    <input 
-                    matInput 
-                    placeholder="Postal Service ID"
-                    formControlName="postalServiceId">
-                  </mat-form-field>
-                  
-                  <mat-form-field>
-                    <input 
-                    matInput 
-                    placeholder="Category ID"
-                    formControlName="categoryId">
-                  </mat-form-field>
-            
-                  <mat-form-field>
-                    <input 
-                    matInput 
-                    placeholder="Package Group ID"
-                    formControlName="packageGroupId">
-                  </mat-form-field>
-                </mat-expansion-panel>
-                
-              </mat-accordion> -->
-
+         
               <mat-form-field >
                 <mat-select placeholder="Postal Service ID" formControlName="postalServiceId" [(value)]="postServiceSelected">
                   <mat-option *ngFor="let postalServiceId of postalServiceIdArray" [value]="postalServiceId.Value" >
@@ -189,12 +158,12 @@
                 <button 
                   mat-stroked-button 
                   type="submit"  
-                  color="primary">SAVE</button>
-                <button mat-stroked-button (click)="cancel()" color="warn">CANCEL</button>
+                  color="primary">SAVE 保存</button>
+                <button mat-stroked-button (click)="cancel()" color="warn">CANCEL 撤消</button>
             </mat-card-actions>
       
             <mat-card-actions *ngIf="!editMode && showButton">
-                <button mat-stroked-button (click)="edit()"color="primary" >EDIT</button>
+                <button mat-stroked-button (click)="edit()"color="primary" >EDIT 編輯</button>
             </mat-card-actions>
         </form>
       </mat-card>
