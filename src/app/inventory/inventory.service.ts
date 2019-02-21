@@ -49,13 +49,32 @@ export class InventoryService{
         return  this.http.post(url,params,options);
     }
     getItemDetails(StockItemId){
-        let url = `${this.tokenService.getServer()}/api/Inventory/getInventoryItemById`;
+        let url = `${this.tokenService.getServer()}/api/Inventory/GetInventoryItemById`;
         let params = {
                 id: StockItemId,
             }
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
     }
+    getPostalServices(){
+        let url = `${this.tokenService.getServer()}/api/Inventory/GetPostalServices`;
+        let params = {}
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
+        return  this.http.post(url,params,options);
+    }
+    getCategories(){
+        let url = `${this.tokenService.getServer()}/api/Inventory/GetCategories`;
+        let params = {}
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
+        return  this.http.post(url,params,options);
+    }
+    getPackageGroups(){
+        let url = `${this.tokenService.getServer()}/api/Inventory/GetPackageGroups`;
+        let params = {}
+        const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
+        return  this.http.post(url,params,options);
+    }
+
     setQuantity(sku:string,quantity:string){
         let url = `${this.tokenService.getServer()}/api/Stock/SetStockLevel`;
         let params = {
@@ -101,30 +120,42 @@ export class InventoryService{
 
     updateInventoryItem(details, itemStockId){
         let url = `${this.tokenService.getServer()}/api/Inventory/UpdateInventoryItem`;
+    
+        // let params = {
+        //     inventoryItem: {
+        //         "VariationGroupName":"",
+        //         "Quantity":details.quantity,
+        //         "InOrder":details.inOrder,
+        //         "Due":details.due,
+        //         "MinimumLevel":details.minimumLevel,
+        //         "Available":details.available,
+        //         "CreationDate":null,
+        //         "IsCompositeParent":false,
+        //         "ItemNumber":details.itemNumber,
+        //         "ItemTitle":details.itemTitle,
+        //         "BarcodeNumber":details.barcodeNumber,
+        //         "MetaData":"",
+        //         "isBatchedStockType":false,
+        //         "PurchasePrice":details.purchasePrice,
+        //         "RetailPrice":details.retailPrice,
+        //         "PostalServiceId":details.postalServiceId,
+        //         "PostalServiceName":null,"CategoryId":details.packageGroupId,
+        //         "CategoryName":null,"PackageGroupId":details.categoryId,
+        //         "PackageGroupName":null,"Height":details.height,"Width":details.width,"Depth":details.depth,"Weight":details.weight,
+        //         "InventoryTrackingType":0,"StockItemId":itemStockId,
+        //         "currentBatchType":0,"Dim":729}
+        //     }
         let params = {
             inventoryItem: {
-                "VariationGroupName":"",
-                "Quantity":details.quantity,
-                "InOrder":details.inOrder,
-                "Due":details.due,
-                "MinimumLevel":details.minimumLevel,
-                "Available":details.available,
-                "CreationDate":null,
-                "IsCompositeParent":false,
-                "ItemNumber":details.itemNumber,
-                "ItemTitle":details.itemTitle,
-                "BarcodeNumber":details.barcodeNumber,
-                "MetaData":"",
-                "isBatchedStockType":false,
-                "PurchasePrice":details.purchasePrice,
-                "RetailPrice":details.retailPrice,
-                "PostalServiceId":"00000000-0000-0000-0000-000000000000",
-                "PostalServiceName":null,"CategoryId":"00000000-0000-0000-0000-000000000000",
-                "CategoryName":null,"PackageGroupId":"00000000-0000-0000-0000-000000000000",
+                "VariationGroupName":"","Quantity":details.quantity,"InOrder":details.inOrder,"Due":details.due,"MinimumLevel":details.minimumLevel,
+                "Available":details.available,"CreationDate":null,"IsCompositeParent":false,"ItemNumber":details.itemNumber,
+                "ItemTitle":details.itemTitle,"BarcodeNumber":details.barcodeNumber,"MetaData":"","isBatchedStockType":false,
+                "PurchasePrice":details.purchasePrice,"RetailPrice":details.retailPrice,"PostalServiceId":details.postalServiceId,
+                "PostalServiceName":null,"CategoryId":details.categoryId,"CategoryName":null,"PackageGroupId":details.packageGroupId,
                 "PackageGroupName":null,"Height":details.height,"Width":details.width,"Depth":details.depth,"Weight":details.weight,
-                "InventoryTrackingType":0,"StockItemId":itemStockId,
-                "currentBatchType":0,"Dim":0}
+                "InventoryTrackingType":0,"StockItemId":itemStockId,"currentBatchType":0,"Dim":180000}
             }
+            console.log('params', params)
         const options = {  headers: new HttpHeaders().set('Authorization', this.tokenService.getToken()) };
         return  this.http.post(url,params,options);
 
@@ -146,7 +177,6 @@ export class InventoryService{
     }
 
     upload(image,stockItemId){
-        console.log(image)
         let storageRef = firebase.storage().ref();
         this.uploadTask = storageRef.child(`${this.basePath}/${image.name}`).put(image);
         this.uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
@@ -160,8 +190,7 @@ export class InventoryService{
         async()=>{
             this.saveFileData(image)
             //let downloadUrl = await this.uploadTask.snapshot.ref.getDownloadURL();
-            console.log(this.uploadTask.snapshot)
-            
+           
             
             
             

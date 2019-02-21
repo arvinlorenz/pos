@@ -23,6 +23,18 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
   showButton = false;
   itemId;
   suppliers;
+
+  postalServiceIdArray;
+  postServiceSelected;
+  postServiceName;
+
+  categoryIdArray;
+  categorySelected;
+  categoryName;
+
+  packageGroupsIdArray;
+  packageGroupSelected;
+  packageGroupName;
   form: FormGroup;
   @ViewChild("quantity") quantityField: ElementRef;
   constructor(
@@ -117,17 +129,59 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
         this.inventoryService.setSkuDetails({...this.skuDetails, ...initialSkuDetails});
         this.inventoryService.getItemDetails(this.itemStockId)
           .subscribe((itemDetails:any)=>{
-            console.log(itemDetails)
-            this.inventoryService.setSkuDetails({
-              ...this.skuDetails,
-              height: itemDetails.Height,
-              width: itemDetails.Width,
-              depth:itemDetails.Depth,
-              weight: itemDetails.Weight,
-              postalServiceId: itemDetails.PostalServiceId,
-              categoryId: itemDetails.CategoryId,
-              packageGroupId: itemDetails.PackageGroupId,
-            });
+            
+            this.inventoryService.getPostalServices()
+              .subscribe(postalServices=>{
+                this.postalServiceIdArray = postalServices;
+    
+                let postalService = this.postalServiceIdArray.filter(a=>{
+                 return  a.Value === itemDetails.PostalServiceId;
+                  
+                });
+                this.postServiceName = postalService[0].Key;
+                this.postServiceSelected = postalService[0].Value;
+                    this.inventoryService.getCategories()
+                      .subscribe(categories=>{
+                        this.categoryIdArray = categories;
+                  
+                        let category = this.categoryIdArray.filter(b=>{
+                        return  b.CategoryId === itemDetails.CategoryId;
+                        })
+                        this.categoryName = category[0].CategoryName;
+                        this.categorySelected = category[0].CategoryId;
+
+                        this.inventoryService.getPackageGroups()
+                          .subscribe(packageGroups=>{
+                            this.packageGroupsIdArray = packageGroups;
+                
+                            let packageGroup = this.packageGroupsIdArray.filter(c=>{
+                            return  c.Value === itemDetails.PackageGroupId;
+                            });
+                            this.packageGroupName = packageGroup[0].Key;
+                            this.packageGroupSelected = packageGroup[0].Value;
+                          
+                            this.inventoryService.setSkuDetails({
+                              ...this.skuDetails,
+                              height: itemDetails.Height,
+                              width: itemDetails.Width,
+                              depth:itemDetails.Depth,
+                              weight: itemDetails.Weight,
+                              postalServiceId: this.postServiceSelected,
+                              categoryId: this.categorySelected,
+                              packageGroupId: this.packageGroupSelected,
+                            });
+                          });
+                        
+                  
+                    });
+
+
+                
+              })
+
+
+
+            
             
             
           })
@@ -224,10 +278,11 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
           shipping: this.skuDetails.shipping,
           image: null
         });
+        
       });
 
     this.form = new FormGroup({
-      imageUrl: new FormControl(null, Validators.required),
+      imageUrl: new FormControl(null),
       itemTitle: new FormControl(null, Validators.required),
       itemNumber: new FormControl(null, Validators.required),
       quantity: new FormControl(null, Validators.required),
@@ -286,6 +341,7 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
   }
 
   save(){
+    
     let imageUrl = this.form.value.imageUrl.trim();
     let itemTitle = this.form.value.itemTitle;
     let itemNumber = this.form.value.itemNumber;
@@ -297,14 +353,14 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
     let barcodeNumber = this.form.value.barcodeNumber;
     let purchasePrice = this.form.value.purchasePrice;
     let retailPrice = this.form.value.retailPrice;
-    let postalServiceId = this.form.value.postalServiceId;
-    let categoryId = this.form.value.categoryId
-    let packageGroupId = this.form.value.packageGroupId;
+    let postalServiceId = this.form.value.postalServiceId.trim()
+    let categoryId = this.form.value.categoryId.trim()
+    let packageGroupId = this.form.value.packageGroupId.trim()
     let height = this.form.value.height;
     let width = this.form.value.width;
     let depth = this.form.value.depth;
     let weight = this.form.value.weight;
-
+    
     let postage = {...this.postageExtendedProp, PropertyValue: this.form.value.postage}
     let shipping = {...this.shippingExtendedProp, PropertyValue: this.form.value.shipping}
     
@@ -325,8 +381,10 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
       height,
       width,
       depth,
-      weight
+      weight,
+      postServiceName: this.postServiceName, categoryName:this.categoryName, packageGroupName: this.packageGroupName
     };
+    console.log(details.packageGroupId, details.categoryId)
     this.inventoryService.updateInventoryItem(details,this.itemStockId).subscribe(a=>{
       if(a === null){
         // if(this.form.value.image){
@@ -338,11 +396,16 @@ export class InventoryWithSuppliersComponent implements OnInit, OnDestroy{
             this.soundsService.playSuccess();
             this.skuSubscribe()
           })
-        this.inventoryService.uploadImageToLinn(imageUrl,this.itemStockId)
+          
+        if(imageUrl != ''){
+
+          this.inventoryService.uploadImageToLinn(imageUrl,this.itemStockId)
           .subscribe(imageUpload=>{
             console.log(imageUpload);
             this.skuSubscribe();
           })
+        }
+        
         
         
         

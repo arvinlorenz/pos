@@ -128,15 +128,13 @@
                 placeholder="Postage"
                 formControlName="postage">
               </mat-form-field>
-              <mat-accordion>
+              <!-- <mat-accordion>
                 <mat-expansion-panel>
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       Postage definition
                     </mat-panel-title>
-                    <!-- <mat-panel-description>
-                      Type your name and age
-                    </mat-panel-description> -->
+                  
                   </mat-expansion-panel-header>
               
                   <mat-form-field>
@@ -161,7 +159,32 @@
                   </mat-form-field>
                 </mat-expansion-panel>
                 
-              </mat-accordion>
+              </mat-accordion> -->
+
+              <mat-form-field >
+                <mat-select placeholder="Postal Service ID" formControlName="postalServiceId" [(value)]="postServiceSelected">
+                  <mat-option *ngFor="let postalServiceId of postalServiceIdArray" [value]="postalServiceId.Value" >
+                    {{postalServiceId.Key}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-select placeholder="Category ID" formControlName="categoryId" [(value)]="categorySelected">
+                  <mat-option *ngFor="let categoryId of categoryIdArray" [value]="categoryId.CategoryId" >
+                    {{categoryId.CategoryName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-select placeholder="Package Group ID" formControlName="packageGroupId" [(value)]="packageGroupSelected">
+                  <mat-option *ngFor="let packageGroupId of packageGroupsIdArray" [value]="packageGroupId.Value" >
+                    {{packageGroupId.Key}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
             <mat-card-actions *ngIf="editMode && showButton">
                 <button 
                   mat-stroked-button 

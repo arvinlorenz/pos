@@ -18,13 +18,13 @@ const routes: Routes = [
     children: [
       { path: '', component: InventoryDetailComponent },
       { path: ':itemId', component: InventoryDetailComponent },
-    ], canActivate: [AuthGuard]
+    ]
   },
   { path: 'suppliers', component: InventoryComponent,
     children: [
       { path: '', component: InventoryWithSuppliersComponent },
       { path: ':itemId', component: InventoryWithSuppliersComponent },
-    ], canActivate: [AuthGuard]
+    ]
   },
   { path: 'login', component: LoginComponent},
     
